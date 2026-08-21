@@ -235,6 +235,123 @@ main {
   color: #1b5e20;
 }
 
+.details-button {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 10px 16px;
+  background: #2e7d32;
+  color: #ffffff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: 0.2s ease;
+}
+
+.details-button:hover {
+  background: #1b5e20;
+  transform: translateY(-1px);
+}
+
+/* ================================
+   Product Details
+================================ */
+
+.product-details {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 50px 24px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 25px;
+  color: #2e7d32;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.back-link:hover {
+  color: #1b5e20;
+}
+
+.details-card {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 50px;
+  padding: 40px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.details-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  background: #f1f8f2;
+  border-radius: 16px;
+  padding: 30px;
+}
+
+.details-image img {
+  max-width: 100%;
+  max-height: 350px;
+  object-fit: contain;
+}
+
+.details-content h1 {
+  margin: 10px 0;
+  color: #1b5e20;
+  font-size: 2.3rem;
+  line-height: 1.2;
+}
+
+.brand {
+  margin-bottom: 25px;
+  color: #6b7280;
+}
+
+.details-scores {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.detail-score {
+  flex: 1;
+  padding: 18px;
+  background: #eef7ee;
+  border-radius: 12px;
+}
+
+.detail-score span {
+  display: block;
+  margin-bottom: 8px;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.detail-score strong {
+  color: #2e7d32;
+  font-size: 1.5rem;
+}
+
+.details-section {
+  margin-top: 25px;
+}
+
+.details-section h2 {
+  color: #1b5e20;
+  font-size: 1.2rem;
+}
+
+.details-section p {
+  color: #6b7280;
+  line-height: 1.7;
+}
+
 /* ================================
    Loading & Error States
 ================================ */
@@ -282,6 +399,23 @@ main {
 
   .products-header h1 {
     font-size: 2.2rem;
+  }
+
+  .details-card {
+    grid-template-columns: 1fr;
+    padding: 25px;
+  }
+
+  .details-image {
+    min-height: 300px;
+  }
+
+  .details-content h1 {
+    font-size: 1.9rem;
+  }
+
+  .details-scores {
+    flex-direction: column;
   }
 }
 

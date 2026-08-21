@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function ProductCard({ product }) {
   return (
     <article className="product-card">
@@ -23,6 +25,13 @@ function ProductCard({ product }) {
             {product.ecoscore_grade?.toUpperCase() || "N/A"}
           </span>
         </div>
+
+        <Link
+          to={`/products/${product.code}`}
+          className="details-button"
+        >
+          View Details →
+        </Link>
       </div>
     </article>
   );
