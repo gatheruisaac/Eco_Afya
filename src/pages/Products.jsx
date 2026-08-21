@@ -8,6 +8,7 @@ function Products() {
 
   const [favorites, setFavorites] = useState(() => {
     const savedFavorites = localStorage.getItem("ecoAfyaFavorites");
+
     return savedFavorites ? JSON.parse(savedFavorites) : [];
   });
 
@@ -17,9 +18,7 @@ function Products() {
         setLoading(true);
         setError("");
 
-        const response = await fetch(
-          "https://world.openfoodfacts.org/api/v2/search?categories_tags=en:plant-based-foods&page_size=20"
-        );
+        const response = await fetch("/api/products");
 
         if (!response.ok) {
           throw new Error("Failed to fetch products");
