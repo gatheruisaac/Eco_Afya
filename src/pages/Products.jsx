@@ -6,28 +6,60 @@ function Products() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [favorites, setFavorites] = useState(() => {
+    const savedFavorites = localStorage.getItem("ecoAfyaFavorites");
+
+    return savedFavorites ? JSON.parse(savedFavorites) : [];
+  });
+
   useEffect(() => {
-    fetch(
-      "https://world.openfoodfacts.org/api/v2/search?categories_tags=en:plant-based-foods&page_size=20"
-    )
-      .then((response) => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await fetch(
+          "https://world.openfoodfacts.org/api/v2/search?categories_tags=en:plant-based-foods&page_size=20"
+        );
+
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
 
-        return response.json();
-      })
-      .then((data) => {
+        const data = await response.json();
+
         setProducts(data.products || []);
-      })
-      .catch((error) => {
-        console.error("Product fetch error:", error);
+      } catch (err) {
+        console.error("Product fetch error:", err);
         setError("Unable to load products. Please try again later.");
-      })
-      .finally(() => {
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchProducts();
   }, []);
+
+  const toggleFavorite = (product) => {
+    setFavorites((currentFavorites) => {
+      const alreadyFavorite = currentFavorites.some(
+        (favorite) => favorite.code === product.code
+      );
+
+      const updatedFavorites = alreadyFavorite
+        ? currentFavorites.filter(
+            (favorite) => favorite.code !== product.code
+          )
+        : [...currentFavorites, product];
+
+      localStorage.setItem(
+        "ecoAfyaFavorites",
+        JSON.stringify(updatedFavorites)
+      );
+
+      return updatedFavorites;
+    });
+  };
 
   if (loading) {
     return (
@@ -61,14 +93,21 @@ function Products() {
         <h1>Explore Better Food Choices 🌱</h1>
 
         <p>
-          Discover nutritional and environmental information to help you make
-          healthier, more sustainable food choices.
+          Discover nutritional and environmental information to help you
+          make healthier, more sustainable food choices.
         </p>
       </section>
 
       <section className="products-grid">
         {products.map((product) => (
-          <ProductCard key={product.code} product={product} />
+          <ProductCard
+            key={product.code}
+            product={product}
+            onFavorite={toggleFavorite}
+            isFavorite={favorites.some(
+              (favorite) => favorite.code === product.code
+            )}
+          />
         ))}
       </section>
     </main>

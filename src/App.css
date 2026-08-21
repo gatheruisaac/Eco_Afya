@@ -235,9 +235,20 @@ main {
   color: #1b5e20;
 }
 
+/* ================================
+   Product Actions
+================================ */
+
+.product-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 18px;
+}
+
 .details-button {
   display: inline-block;
-  margin-top: 18px;
   padding: 10px 16px;
   background: #2e7d32;
   color: #ffffff;
@@ -251,6 +262,29 @@ main {
 .details-button:hover {
   background: #1b5e20;
   transform: translateY(-1px);
+}
+
+.favorite-button {
+  width: 42px;
+  height: 42px;
+  border: 1px solid #d1d5db;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #6b7280;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.favorite-button:hover {
+  transform: scale(1.08);
+  border-color: #2e7d32;
+  color: #2e7d32;
+}
+
+.favorite-active {
+  color: #d32f2f;
+  border-color: #d32f2f;
 }
 
 /* ================================
@@ -353,6 +387,31 @@ main {
 }
 
 /* ================================
+   Favorites
+================================ */
+
+.empty-favorites {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 50px 30px;
+  text-align: center;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+}
+
+.empty-favorites h2 {
+  color: #1b5e20;
+  margin-bottom: 12px;
+}
+
+.empty-favorites p {
+  margin-bottom: 25px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+/* ================================
    Loading & Error States
 ================================ */
 
@@ -444,5 +503,14 @@ main {
 
   .product-image-container {
     height: 240px;
+  }
+
+  .product-actions {
+    align-items: stretch;
+  }
+
+  .details-button {
+    flex: 1;
+    text-align: center;
   }
 }
