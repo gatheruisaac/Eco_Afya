@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ProductCard from "../components/ProductCard";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -6,79 +7,68 @@ function Products() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        setError("");
-
-        const response = await fetch(
-          "https://world.openfoodfacts.org/api/v2/search?categories_tags=en:plant-based-foods&page_size=20"
-        );
-
+    fetch(
+      "https://world.openfoodfacts.org/api/v2/search?categories_tags=en:plant-based-foods&page_size=20"
+    )
+      .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
 
-        const data = await response.json();
-
+        return response.json();
+      })
+      .then((data) => {
         setProducts(data.products || []);
-      } catch (err) {
-        setError("Unable to load products. Please try again.");
-      } finally {
+      })
+      .catch((error) => {
+        console.error("Product fetch error:", error);
+        setError("Unable to load products. Please try again later.");
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    };
-
-    fetchProducts();
+      });
   }, []);
 
   if (loading) {
     return (
-      <main>
-        <h1>Eco Afya Products</h1>
-        <p>Loading products...</p>
+      <main className="products-page">
+        <section className="products-header">
+          <p className="eyebrow">SMART FOOD CHOICES</p>
+          <h1>Explore Better Food Choices 🌱</h1>
+          <p>Loading products...</p>
+        </section>
       </main>
     );
   }
 
   if (error) {
     return (
-      <main>
-        <h1>Eco Afya Products</h1>
-        <p>{error}</p>
+      <main className="products-page">
+        <section className="products-header">
+          <p className="eyebrow">SMART FOOD CHOICES</p>
+          <h1>Explore Better Food Choices 🌱</h1>
+          <p>{error}</p>
+        </section>
       </main>
     );
   }
 
   return (
-    <main>
-      <h1>Eco Afya Products</h1>
+    <main className="products-page">
+      <section className="products-header">
+        <p className="eyebrow">SMART FOOD CHOICES</p>
 
-      <p>
-        Explore food products and learn more about their nutritional and
-        environmental information.
-      </p>
+        <h1>Explore Better Food Choices 🌱</h1>
 
-      <section>
+        <p>
+          Discover nutritional and environmental information to help you make
+          healthier, more sustainable food choices.
+        </p>
+      </section>
+
+      <section className="products-grid">
         {products.map((product) => (
-          <article key={product.code}>
-            <img
-              src={product.image_front_small_url}
-              alt={product.product_name || "Food product"}
-            />
-
-            <h2>{product.product_name || "Unknown product"}</h2>
-
-            <p>
-              Nutri-Score:{" "}
-              {product.nutriscore_grade?.toUpperCase() || "Not available"}
-            </p>
-
-            <p>
-              Eco-Score:{" "}
-              {product.ecoscore_grade?.toUpperCase() || "Not available"}
-            </p>
-          </article>
+          <ProductCard key={product.code} product={product} />
         ))}
       </section>
     </main>

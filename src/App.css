@@ -1,184 +1,314 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
+/* ================================
+   Eco Afya - Global Styles
+================================ */
 
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
+#root {
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f7faf7;
+  color: #1f2937;
+}
+
+/* ================================
+   Navigation
+================================ */
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 40px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #374151;
+  font-weight: 600;
+}
+
+.navbar a:hover {
+  color: #2e7d32;
+}
+
+.navbar-brand {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #2e7d32 !important;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* ================================
+   General Pages
+================================ */
+
+main {
+  min-height: calc(100vh - 80px);
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+/* ================================
+   Home Page
+================================ */
+
+.home {
+  min-height: calc(100vh - 80px);
 }
 
 .hero {
-  position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 24px;
+  text-align: center;
 }
 
-#center {
+.hero h1 {
+  max-width: 800px;
+  margin: 0 auto 20px;
+  font-size: 3.5rem;
+  line-height: 1.1;
+  color: #1b5e20;
+}
+
+.hero p {
+  max-width: 650px;
+  margin: 0 auto 30px;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #6b7280;
+}
+
+.hero-button {
+  display: inline-block;
+  padding: 14px 28px;
+  background: #2e7d32;
+  color: white;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: 0.2s ease;
+}
+
+.hero-button:hover {
+  background: #1b5e20;
+  transform: translateY(-2px);
+}
+
+/* ================================
+   Products Page
+================================ */
+
+.products-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 50px 24px;
+}
+
+.products-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 45px;
+}
+
+.eyebrow {
+  margin-bottom: 10px;
+  color: #2e7d32;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.products-header h1 {
+  margin: 0 0 16px;
+  color: #1b5e20;
+  font-size: 2.7rem;
+  line-height: 1.2;
+}
+
+.products-header p:last-child {
+  margin: 0;
+  color: #6b7280;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+/* ================================
+   Product Grid
+================================ */
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+/* ================================
+   Product Card
+================================ */
+
+.product-card {
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+}
+
+.product-image-container {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #f1f8f2;
+}
+
+.product-image {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+}
+
+.product-info {
+  padding: 20px;
+}
+
+.product-info h2 {
+  min-height: 52px;
+  margin: 0 0 18px;
+  color: #1f2937;
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+
+.product-scores {
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
-}
-
-#next-steps {
-  display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
-
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
-  }
-
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-#docs {
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-}
-
-#next-steps ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
   gap: 8px;
-  margin: 32px 0 0;
+}
 
-  .logo {
-    height: 18px;
+.score {
+  display: block;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.nutrition {
+  background: #eef7ee;
+  color: #2e7d32;
+}
+
+.environment {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+/* ================================
+   Loading & Error States
+================================ */
+
+.loading,
+.error {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.error {
+  color: #b91c1c;
+}
+
+/* ================================
+   Responsive Design
+================================ */
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 16px 20px;
   }
 
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
+  .navbar-links {
+    gap: 14px;
   }
 
-  @media (max-width: 1024px) {
-    margin-top: 20px;
+  .navbar a {
+    font-size: 0.9rem;
+  }
+
+  .hero {
+    padding: 60px 20px;
+  }
+
+  .hero h1 {
+    font-size: 2.6rem;
+  }
+
+  .products-page {
+    padding: 35px 20px;
+  }
+
+  .products-header h1 {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .navbar-links {
     flex-wrap: wrap;
     justify-content: center;
-
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
-
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-  }
-}
-
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
-  }
-}
-
-.ticks {
-  position: relative;
-  width: 100%;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
   }
 
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
+  .hero h1 {
+    font-size: 2.2rem;
   }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-image-container {
+    height: 240px;
   }
 }
