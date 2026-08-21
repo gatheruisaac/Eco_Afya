@@ -8,7 +8,6 @@ function Products() {
 
   const [favorites, setFavorites] = useState(() => {
     const savedFavorites = localStorage.getItem("ecoAfyaFavorites");
-
     return savedFavorites ? JSON.parse(savedFavorites) : [];
   });
 
@@ -19,7 +18,7 @@ function Products() {
         setError("");
 
         const response = await fetch(
-          "https://world.openfoodfacts.org/api/v2/search?categories_tags=en:plant-based-foods&page_size=20&fields=code,product_name,image_front_small_url,image_front_url,nutriscore_grade,ecoscore_grade,brands"
+          "https://world.openfoodfacts.org/api/v2/search?categories_tags=en:plant-based-foods&page_size=20"
         );
 
         if (!response.ok) {
@@ -28,7 +27,11 @@ function Products() {
 
         const data = await response.json();
 
-        setProducts(data.products || []);
+        if (!data.products || data.products.length === 0) {
+          throw new Error("No products found");
+        }
+
+        setProducts(data.products);
       } catch (err) {
         console.error("Product fetch error:", err);
         setError("Unable to load products. Please try again later.");
@@ -80,6 +83,10 @@ function Products() {
           <p className="eyebrow">SMART FOOD CHOICES</p>
           <h1>Explore Better Food Choices 🌱</h1>
           <p>{error}</p>
+
+          <button onClick={() => window.location.reload()}>
+            Try Again
+          </button>
         </section>
       </main>
     );
