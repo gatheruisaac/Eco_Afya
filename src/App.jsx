@@ -11,6 +11,8 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import FoodLogs from "./pages/FoodLogs";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function ProtectedRoute({ user, children }) {
   if (!user) {
     return <Navigate to="/login" replace />;
@@ -26,12 +28,9 @@ function App() {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5000/check-session",
-          {
-            credentials: "include",
-          }
-        );
+        const response = await fetch(`${API_URL}/check-session`, {
+          credentials: "include",
+        });
 
         const data = await response.json();
 
@@ -57,7 +56,7 @@ function App() {
 
   const handleLogout = async () => {
     try {
-      await fetch("http://localhost:5000/logout", {
+      await fetch(`${API_URL}/logout`, {
         method: "POST",
         credentials: "include",
       });

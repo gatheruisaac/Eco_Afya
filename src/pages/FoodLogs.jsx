@@ -1,32 +1,25 @@
 import { useEffect, useState } from "react";
 
-const API_URL = "http://localhost:5000";
+const API_URL = import.meta.env.VITE_API_URL;
 
-function FoodLogs() {
+function FoodLogs({ user }) {
   const [foodLogs, setFoodLogs] = useState([]);
+  const [productName, setProductName] = useState("");
+  const [barcode, setBarcode] = useState("");
+  const [rating, setRating] = useState("5");
+  const [notes, setNotes] = useState("");
+
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  const [form, setForm] = useState({
-    product_name: "",
-    barcode: "",
-    notes: "",
-    rating: "",
-  });
+  const loadFoodLogs = async () => {
+    setLoading(true);
+    setError("");
 
-  const [editingId, setEditingId] = useState(null);
-
-  useEffect(() => {
-    fetchFoodLogs();
-  }, []);
-
-  async function fetchFoodLogs() {
     try {
-      setLoading(true);
-      setError("");
-
       const response = await fetch(
-        `${API_URL}/food-logs?page=1&per_page=10`,
+        `${API_URL}/food-logs?page=1&per_page=50`,
         {
           credentials: "include",
         }
@@ -35,131 +28,82 @@ function FoodLogs() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Unable to load food logs.");
+        throw new Error(data.error || "Unable to load food logs");
       }
 
-      setFoodLogs(data.food_logs || []);
+      setFoodLogs(data.food_logs || data.logs || []);
     } catch (err) {
       console.error("Food logs error:", err);
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  function handleChange(event) {
-    const { name, value } = event.target;
+  useEffect(() => {
+    if (user) {
+      loadFoodLogs();
+    } else {
+      setLoading(false);
+    }
+  }, [user]);
 
-    setForm((currentForm) => ({
-      ...currentForm,
-      [name]: value,
-    }));
-  }
-
-  function resetForm() {
-    setForm({
-      product_name: "",
-      barcode: "",
-      notes: "",
-      rating: "",
-    });
-
-    setEditingId(null);
-  }
-
-  async function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
+    setSaving(true);
+    setError("");
+
     try {
-      setError("");
-
-      const payload = {
-        product_name: form.product_name.trim(),
-        barcode: form.barcode.trim(),
-        notes: form.notes.trim(),
-        rating: form.rating ? Number(form.rating) : null,
-      };
-
-      const response = await fetch(
-        editingId
-          ? `${API_URL}/food-logs/${editingId}`
-          : `${API_URL}/food-logs`,
-        {
-          method: editingId ? "PATCH" : "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const response = await fetch(`${API_URL}/food-logs`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          product_name: productName,
+          barcode,
+          rating: Number(rating),
+          notes,
+        }),
+      });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Unable to save food log.");
+        throw new Error(data.error || "Unable to save food log");
       }
 
-      if (editingId) {
-        setFoodLogs((currentLogs) =>
-          currentLogs.map((log) =>
-            log.id === editingId ? data.food_log : log
-          )
-        );
-      } else {
-        setFoodLogs((currentLogs) => [
-          data.food_log,
-          ...currentLogs,
-        ]);
-      }
+      setProductName("");
+      setBarcode("");
+      setRating("5");
+      setNotes("");
 
-      resetForm();
+      await loadFoodLogs();
     } catch (err) {
       console.error("Save food log error:", err);
       setError(err.message);
+    } finally {
+      setSaving(false);
     }
-  }
+  };
 
-  function handleEdit(log) {
-    setEditingId(log.id);
-
-    setForm({
-      product_name: log.product_name || "",
-      barcode: log.barcode || "",
-      notes: log.notes || "",
-      rating: log.rating || "",
-    });
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }
-
-  async function handleDelete(id) {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this food log?"
-    );
-
-    if (!confirmed) {
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this food log?")) {
       return;
     }
 
     try {
-      setError("");
+      const response = await fetch(`${API_URL}/food-logs/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
 
-      const response = await fetch(
-        `${API_URL}/food-logs/${id}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        }
-      );
-
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        throw new Error(data.error || "Unable to delete food log.");
+        throw new Error(data.error || "Unable to delete food log");
       }
 
       setFoodLogs((currentLogs) =>
@@ -169,192 +113,147 @@ function FoodLogs() {
       console.error("Delete food log error:", err);
       setError(err.message);
     }
-  }
+  };
 
-  if (loading) {
+  if (!user) {
     return (
-      <main className="loading-page">
-        <p>Loading your food logs...</p>
+      <main className="auth-page">
+        <section className="auth-card">
+          <p className="eyebrow">PERSONAL FOOD TRACKER</p>
+
+          <h1>Authentication required</h1>
+
+          <p className="auth-description">
+            Please sign in to manage your personal food logs.
+          </p>
+        </section>
       </main>
     );
   }
 
   return (
-    <main className="products-page">
-      <section className="products-header">
-        <p className="eyebrow">MY FOOD LOGS</p>
+    <main className="food-logs-page">
+      <section className="food-logs-header">
+        <p className="eyebrow">YOUR FOOD JOURNEY</p>
 
-        <h1>
-          {editingId ? "Edit Food Log ✏️" : "Track Your Food 🌱"}
-        </h1>
+        <h1>Track Your Food 🌱</h1>
 
         <p>
-          Record foods you have reviewed and keep track of
-          your personal ratings and notes.
+          Record foods you have reviewed and keep track of your personal
+          ratings and notes.
         </p>
       </section>
 
-      {error && (
-        <section className="products-header">
-          <p>{error}</p>
-        </section>
-      )}
+      {error && <p className="error-message">{error}</p>}
 
-      <section className="details-card">
-        <div className="details-content">
-          <h2>
-            {editingId ? "Update Food Log" : "Add Food Log"}
-          </h2>
+      <section className="food-log-form-card">
+        <h2>Add Food Log</h2>
 
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="product_name">
-                Product Name
-              </label>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="product-name">Product Name</label>
 
-              <input
-                id="product_name"
-                name="product_name"
-                type="text"
-                value={form.product_name}
-                onChange={handleChange}
-                placeholder="e.g. Pain De Mie Bio"
-                required
-              />
-            </div>
+          <input
+            id="product-name"
+            type="text"
+            value={productName}
+            onChange={(event) => setProductName(event.target.value)}
+            placeholder="e.g. Organic Oats"
+            required
+          />
 
-            <div>
-              <label htmlFor="barcode">
-                Barcode
-              </label>
+          <label htmlFor="barcode">Barcode</label>
 
-              <input
-                id="barcode"
-                name="barcode"
-                type="text"
-                value={form.barcode}
-                onChange={handleChange}
-                placeholder="Product barcode"
-              />
-            </div>
+          <input
+            id="barcode"
+            type="text"
+            value={barcode}
+            onChange={(event) => setBarcode(event.target.value)}
+            placeholder="Product barcode"
+          />
 
-            <div>
-              <label htmlFor="rating">
-                Rating
-              </label>
+          <label htmlFor="rating">Rating</label>
 
-              <select
-                id="rating"
-                name="rating"
-                value={form.rating}
-                onChange={handleChange}
-              >
-                <option value="">Select rating</option>
-                <option value="1">1 / 5</option>
-                <option value="2">2 / 5</option>
-                <option value="3">3 / 5</option>
-                <option value="4">4 / 5</option>
-                <option value="5">5 / 5</option>
-              </select>
-            </div>
+          <select
+            id="rating"
+            value={rating}
+            onChange={(event) => setRating(event.target.value)}
+          >
+            <option value="1">1 / 5</option>
+            <option value="2">2 / 5</option>
+            <option value="3">3 / 5</option>
+            <option value="4">4 / 5</option>
+            <option value="5">5 / 5</option>
+          </select>
 
-            <div>
-              <label htmlFor="notes">
-                Notes
-              </label>
+          <label htmlFor="notes">Notes</label>
 
-              <textarea
-                id="notes"
-                name="notes"
-                value={form.notes}
-                onChange={handleChange}
-                placeholder="Add your thoughts about this product..."
-                rows="4"
-              />
-            </div>
+          <textarea
+            id="notes"
+            value={notes}
+            onChange={(event) => setNotes(event.target.value)}
+            placeholder="What did you think about this product?"
+            rows="4"
+          />
 
-            <div className="product-actions">
-              <button type="submit">
-                {editingId ? "Update Food Log" : "Add Food Log"}
-              </button>
+          <button type="submit" disabled={saving}>
+            {saving ? "Saving..." : "Add Food Log"}
+          </button>
+        </form>
+      </section>
 
-              {editingId && (
+      <section className="saved-food-logs">
+        <div className="section-heading">
+          <h2>Saved Food Logs</h2>
+
+          <button
+            type="button"
+            onClick={loadFoodLogs}
+            disabled={loading}
+          >
+            {loading ? "Loading..." : "Refresh"}
+          </button>
+        </div>
+
+        {loading ? (
+          <p>Loading your food logs...</p>
+        ) : foodLogs.length === 0 ? (
+          <p>You don't have any food logs yet.</p>
+        ) : (
+          <div className="food-log-list">
+            {foodLogs.map((log) => (
+              <article className="food-log-card" key={log.id}>
+                <div>
+                  <h3>{log.product_name}</h3>
+
+                  {log.barcode && (
+                    <p>
+                      <strong>Barcode:</strong> {log.barcode}
+                    </p>
+                  )}
+
+                  <p>
+                    <strong>Rating:</strong> {log.rating} / 5
+                  </p>
+
+                  {log.notes && (
+                    <p>
+                      <strong>Notes:</strong> {log.notes}
+                    </p>
+                  )}
+                </div>
+
                 <button
                   type="button"
-                  onClick={resetForm}
+                  className="delete-button"
+                  onClick={() => handleDelete(log.id)}
                 >
-                  Cancel
+                  Delete
                 </button>
-              )}
-            </div>
-          </form>
-        </div>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
-
-      <section className="products-header">
-        <h2>Saved Food Logs</h2>
-      </section>
-
-      {foodLogs.length === 0 ? (
-        <section className="products-header">
-          <p>You don't have any food logs yet.</p>
-        </section>
-      ) : (
-        <section className="products-grid">
-          {foodLogs.map((log) => (
-            <article
-              className="product-card"
-              key={log.id}
-            >
-              <div className="product-info">
-                <p className="eyebrow">FOOD LOG</p>
-
-                <h2>{log.product_name}</h2>
-
-                <p>
-                  <strong>Rating:</strong>{" "}
-                  {log.rating
-                    ? `${log.rating}/5`
-                    : "Not rated"}
-                </p>
-
-                <p>
-                  <strong>Barcode:</strong>{" "}
-                  {log.barcode || "Not available"}
-                </p>
-
-                <p>
-                  <strong>Notes:</strong>{" "}
-                  {log.notes || "No notes added"}
-                </p>
-
-                <p>
-                  <strong>Logged:</strong>{" "}
-                  {new Date(
-                    log.created_at
-                  ).toLocaleDateString()}
-                </p>
-
-                <div className="product-actions">
-                  <button
-                    type="button"
-                    onClick={() => handleEdit(log)}
-                  >
-                    Edit
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(log.id)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </article>
-          ))}
-        </section>
-      )}
     </main>
   );
 }

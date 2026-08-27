@@ -1,30 +1,34 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function Signup() {
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     setError("");
+    setSuccess("");
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/signup", {
+      const response = await fetch(`${API_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
         body: JSON.stringify({
-          username,
+          name,
           email,
           password,
         }),
@@ -36,7 +40,11 @@ function Signup() {
         throw new Error(data.error || "Signup failed");
       }
 
-      navigate("/login");
+      setSuccess("Account created successfully! Redirecting to login...");
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 1200);
     } catch (err) {
       console.error("Signup error:", err);
       setError(err.message);
@@ -48,25 +56,27 @@ function Signup() {
   return (
     <main className="auth-page">
       <section className="auth-card">
-        <p className="eyebrow">JOIN ECO AFYA</p>
+        <p className="eyebrow">GET STARTED</p>
 
-        <h1>Create your account</h1>
+        <h1>Create your Eco Afya account</h1>
 
         <p className="auth-description">
-          Start tracking your food choices and build healthier habits.
+          Create an account to save and manage your personal food logs.
         </p>
 
         {error && <p className="error-message">{error}</p>}
 
+        {success && <p className="success-message">{success}</p>}
+
         <form onSubmit={handleSubmit}>
-          <label htmlFor="username">Username</label>
+          <label htmlFor="name">Name</label>
 
           <input
-            id="username"
+            id="name"
             type="text"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-            placeholder="Choose a username"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            placeholder="Enter your name"
             required
           />
 
@@ -89,12 +99,11 @@ function Signup() {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             placeholder="Create a password"
-            minLength={6}
             required
           />
 
           <button type="submit" disabled={loading}>
-            {loading ? "Creating account..." : "Sign Up"}
+            {loading ? "Creating account..." : "Create Account"}
           </button>
         </form>
 

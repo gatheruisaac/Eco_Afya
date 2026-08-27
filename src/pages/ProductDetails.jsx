@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 function ProductDetails() {
   const { barcode } = useParams();
@@ -10,39 +12,39 @@ function ProductDetails() {
 
   useEffect(() => {
     const fetchProduct = async () => {
+      setLoading(true);
+      setError("");
+
       try {
-        setLoading(true);
-        setError("");
-
         const response = await fetch(
-          `https://world.openfoodfacts.org/api/v2/product/${barcode}.json`
+          `${API_URL}/products/${barcode}`
         );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch product");
-        }
 
         const data = await response.json();
 
-        if (data.status !== 1 || !data.product) {
-          throw new Error("Product not found");
+        if (!response.ok) {
+          throw new Error(
+            data.error || "Unable to load product details"
+          );
         }
 
-        setProduct(data.product);
+        setProduct(data.product || data);
       } catch (err) {
         console.error("Product details error:", err);
-        setError("Unable to load product details.");
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProduct();
+    if (barcode) {
+      fetchProduct();
+    }
   }, [barcode]);
 
   if (loading) {
     return (
-      <main className="product-details">
+      <main className="loading-page">
         <p>Loading product details...</p>
       </main>
     );
@@ -50,97 +52,83 @@ function ProductDetails() {
 
   if (error) {
     return (
-      <main className="product-details">
-        <h1>Product Details</h1>
-
+      <main className="error-page">
+        <h1>Unable to load product</h1>
         <p>{error}</p>
 
-        <Link to="/products" className="back-link">
-          ← Back to Products
+        <Link to="/products">
+          Back to Products
+        </Link>
+      </main>
+    );
+  }
+
+  if (!product) {
+    return (
+      <main className="error-page">
+        <h1>Product not found</h1>
+
+        <Link to="/products">
+          Back to Products
         </Link>
       </main>
     );
   }
 
   return (
-    <main className="product-details">
+    <main className="product-details-page">
       <Link to="/products" className="back-link">
         ← Back to Products
       </Link>
 
-      <section className="details-card">
-        <div className="details-image">
+      <section className="product-details-card">
+        {product.image_front_url && (
           <img
             src={product.image_front_url}
             alt={product.product_name || "Food product"}
+            className="product-details-image"
           />
-        </div>
+        )}
 
-        <div className="details-content">
-          <p className="eyebrow">PRODUCT INFORMATION</p>
+        <div className="product-details-content">
+          <p className="eyebrow">PRODUCT DETAILS</p>
 
-          <h1>{product.product_name || "Unknown Product"}</h1>
+          <h1>
+            {product.product_name || "Unnamed Product"}
+          </h1>
 
-          <p className="brand">
-            Brand: {product.brands || "Not available"}
-          </p>
+          {product.brands && (
+            <p className="product-brand">
+              {product.brands}
+            </p>
+          )}
 
-          <div className="details-scores">
-            <div className="detail-score">
+          <div className="product-scores">
+            <div className="score-card">
               <span>Nutri-Score</span>
-
               <strong>
                 {product.nutriscore_grade?.toUpperCase() || "N/A"}
               </strong>
             </div>
 
-            <div className="detail-score">
+            <div className="score-card">
               <span>Eco-Score</span>
-
               <strong>
                 {product.ecoscore_grade?.toUpperCase() || "N/A"}
               </strong>
             </div>
           </div>
 
-          <div className="details-section">
-            <h2>Ingredients</h2>
+          {product.ingredients_text && (
+            <div className="product-section">
+              <h2>Ingredients</h2>
+              <p>{product.ingredients_text}</p>
+            </div>
+          )}
 
-            <p>
-              {product.ingredients_text ||
-                "Ingredient information is not available."}
-            </p>
-          </div>
-
-          <div className="details-section">
-            <h2>Nutrition</h2>
-
-            <p>
-              Energy:{" "}
-              {product.nutriments?.["energy-kcal_100g"] ?? "N/A"} kcal per
-              100g
-            </p>
-
-            <p>
-              Fat: {product.nutriments?.fat_100g ?? "N/A"}g per 100g
-            </p>
-
-            <p>
-              Sugars: {product.nutriments?.sugars_100g ?? "N/A"}g per 100g
-            </p>
-
-            <p>
-              Protein: {product.nutriments?.proteins_100g ?? "N/A"}g per 100g
-            </p>
-          </div>
-
-          <div className="details-section">
-            <h2>Why it matters</h2>
-
-            <p>
-              Eco Afya combines nutritional and environmental information to
-              help you make healthier and more sustainable food choices.
-            </p>
+          <div className="product-section">
+            <h2>Barcode</h2>
+            <p>{product.code || barcode}</p>
           </div>
         </div>
       </section>
