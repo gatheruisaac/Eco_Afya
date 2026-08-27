@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -21,18 +23,24 @@ def create_app():
     migrate.init_app(app, db)
     bcrypt.init_app(app)
 
+    allowed_origins = [
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://eco-afya.vercel.app",
+    ]
+
+    extra_origin = os.getenv("FRONTEND_URL")
+
+    if extra_origin:
+        allowed_origins.append(extra_origin)
+
     CORS(
         app,
         supports_credentials=True,
-        origins=[
-            "http://localhost:5173",
-            "http://localhost:3000",
-        ],
+        origins=allowed_origins,
     )
 
-    from app.models import User, FoodLog
     from app.routes import main
-
     app.register_blueprint(main)
 
     return app
