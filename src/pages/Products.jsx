@@ -12,33 +12,33 @@ function Products() {
     return savedFavorites ? JSON.parse(savedFavorites) : [];
   });
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        setError("");
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      setError("");
 
-        const response = await fetch("/api/products");
+      const response = await fetch("/api/products");
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch products");
-        }
-
-        const data = await response.json();
-
-        if (!data.products || data.products.length === 0) {
-          throw new Error("No products found");
-        }
-
-        setProducts(data.products);
-      } catch (err) {
-        console.error("Product fetch error:", err);
-        setError("Unable to load products. Please try again later.");
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error("Failed to fetch products");
       }
-    };
 
+      const data = await response.json();
+
+      if (!data.products || data.products.length === 0) {
+        throw new Error("No products found");
+      }
+
+      setProducts(data.products);
+    } catch (err) {
+      console.error("Product fetch error:", err);
+      setError("Unable to load products. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchProducts();
   }, []);
 
@@ -68,7 +68,9 @@ function Products() {
       <main className="products-page">
         <section className="products-header">
           <p className="eyebrow">SMART FOOD CHOICES</p>
+
           <h1>Explore Better Food Choices 🌱</h1>
+
           <p>Loading products...</p>
         </section>
       </main>
@@ -80,10 +82,12 @@ function Products() {
       <main className="products-page">
         <section className="products-header">
           <p className="eyebrow">SMART FOOD CHOICES</p>
+
           <h1>Explore Better Food Choices 🌱</h1>
+
           <p>{error}</p>
 
-          <button onClick={() => window.location.reload()}>
+          <button onClick={fetchProducts}>
             Try Again
           </button>
         </section>

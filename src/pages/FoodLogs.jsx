@@ -1,7 +1,6 @@
-cat > src/pages/FoodLogs.jsx <<'EOF'
 import { useEffect, useState } from "react";
 
-const API_URL = "http://127.0.0.1:5000";
+const API_URL = "http://localhost:5000";
 
 function FoodLogs() {
   const [foodLogs, setFoodLogs] = useState([]);
@@ -17,7 +16,11 @@ function FoodLogs() {
 
   const [editingId, setEditingId] = useState(null);
 
-  const fetchFoodLogs = async () => {
+  useEffect(() => {
+    fetchFoodLogs();
+  }, []);
+
+  async function fetchFoodLogs() {
     try {
       setLoading(true);
       setError("");
@@ -29,15 +32,11 @@ function FoodLogs() {
         }
       );
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("Please log in to view your food logs.");
-        }
-
-        throw new Error("Failed to load food logs.");
-      }
-
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Unable to load food logs.");
+      }
 
       setFoodLogs(data.food_logs || []);
     } catch (err) {
@@ -46,22 +45,18 @@ function FoodLogs() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
-  useEffect(() => {
-    fetchFoodLogs();
-  }, []);
-
-  const handleChange = (event) => {
+  function handleChange(event) {
     const { name, value } = event.target;
 
     setForm((currentForm) => ({
       ...currentForm,
       [name]: value,
     }));
-  };
+  }
 
-  const resetForm = () => {
+  function resetForm() {
     setForm({
       product_name: "",
       barcode: "",
@@ -70,35 +65,34 @@ function FoodLogs() {
     });
 
     setEditingId(null);
-  };
+  }
 
-  const handleSubmit = async (event) => {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     try {
       setError("");
 
       const payload = {
-        product_name: form.product_name,
-        barcode: form.barcode,
-        notes: form.notes,
+        product_name: form.product_name.trim(),
+        barcode: form.barcode.trim(),
+        notes: form.notes.trim(),
         rating: form.rating ? Number(form.rating) : null,
       };
 
-      const url = editingId
-        ? `${API_URL}/food-logs/${editingId}`
-        : `${API_URL}/food-logs`;
-
-      const method = editingId ? "PATCH" : "POST";
-
-      const response = await fetch(url, {
-        method,
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch(
+        editingId
+          ? `${API_URL}/food-logs/${editingId}`
+          : `${API_URL}/food-logs`,
+        {
+          method: editingId ? "PATCH" : "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
       const data = await response.json();
 
@@ -124,9 +118,9 @@ function FoodLogs() {
       console.error("Save food log error:", err);
       setError(err.message);
     }
-  };
+  }
 
-  const handleEdit = (log) => {
+  function handleEdit(log) {
     setEditingId(log.id);
 
     setForm({
@@ -140,9 +134,9 @@ function FoodLogs() {
       top: 0,
       behavior: "smooth",
     });
-  };
+  }
 
-  const handleDelete = async (id) => {
+  async function handleDelete(id) {
     const confirmed = window.confirm(
       "Are you sure you want to delete this food log?"
     );
@@ -175,16 +169,12 @@ function FoodLogs() {
       console.error("Delete food log error:", err);
       setError(err.message);
     }
-  };
+  }
 
   if (loading) {
     return (
-      <main className="products-page">
-        <section className="products-header">
-          <p className="eyebrow">MY FOOD LOGS</p>
-          <h1>Your Food Logs 📋</h1>
-          <p>Loading your food logs...</p>
-        </section>
+      <main className="loading-page">
+        <p>Loading your food logs...</p>
       </main>
     );
   }
@@ -199,8 +189,8 @@ function FoodLogs() {
         </h1>
 
         <p>
-          Record foods you have reviewed, add your notes, and keep
-          track of your personal ratings.
+          Record foods you have reviewed and keep track of
+          your personal ratings and notes.
         </p>
       </section>
 
@@ -217,10 +207,11 @@ function FoodLogs() {
           </h2>
 
           <form onSubmit={handleSubmit}>
-            <p>
+            <div>
               <label htmlFor="product_name">
                 Product Name
               </label>
+
               <input
                 id="product_name"
                 name="product_name"
@@ -230,12 +221,13 @@ function FoodLogs() {
                 placeholder="e.g. Pain De Mie Bio"
                 required
               />
-            </p>
+            </div>
 
-            <p>
+            <div>
               <label htmlFor="barcode">
                 Barcode
               </label>
+
               <input
                 id="barcode"
                 name="barcode"
@@ -244,12 +236,13 @@ function FoodLogs() {
                 onChange={handleChange}
                 placeholder="Product barcode"
               />
-            </p>
+            </div>
 
-            <p>
+            <div>
               <label htmlFor="rating">
                 Rating
               </label>
+
               <select
                 id="rating"
                 name="rating"
@@ -263,12 +256,13 @@ function FoodLogs() {
                 <option value="4">4 / 5</option>
                 <option value="5">5 / 5</option>
               </select>
-            </p>
+            </div>
 
-            <p>
+            <div>
               <label htmlFor="notes">
                 Notes
               </label>
+
               <textarea
                 id="notes"
                 name="notes"
@@ -277,20 +271,22 @@ function FoodLogs() {
                 placeholder="Add your thoughts about this product..."
                 rows="4"
               />
-            </p>
+            </div>
 
-            <button type="submit">
-              {editingId ? "Update Food Log" : "Add Food Log"}
-            </button>
-
-            {editingId && (
-              <button
-                type="button"
-                onClick={resetForm}
-              >
-                Cancel Edit
+            <div className="product-actions">
+              <button type="submit">
+                {editingId ? "Update Food Log" : "Add Food Log"}
               </button>
-            )}
+
+              {editingId && (
+                <button
+                  type="button"
+                  onClick={resetForm}
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
           </form>
         </div>
       </section>
@@ -332,6 +328,13 @@ function FoodLogs() {
                   {log.notes || "No notes added"}
                 </p>
 
+                <p>
+                  <strong>Logged:</strong>{" "}
+                  {new Date(
+                    log.created_at
+                  ).toLocaleDateString()}
+                </p>
+
                 <div className="product-actions">
                   <button
                     type="button"
@@ -357,4 +360,3 @@ function FoodLogs() {
 }
 
 export default FoodLogs;
-EOF
