@@ -1,24 +1,22 @@
 from flask import Blueprint, jsonify, request, session
 from app import db, bcrypt
-from app.models import User
-
+from app.models import User, FoodLog
 
 main = Blueprint("main", __name__)
 
 
-@main.route("/", methods=["GET"])
-def home():
-    return jsonify({
-        "message": "Eco Afya Phase 2 API is running"
-    })
-
+# -------------------------
+# Health Check
+# -------------------------
 
 @main.route("/health", methods=["GET"])
 def health():
-    return jsonify({
-        "status": "healthy"
-    })
+    return jsonify({"status": "healthy"}), 200
 
+
+# -------------------------
+# Authentication
+# -------------------------
 
 @main.route("/signup", methods=["POST"])
 def signup():
@@ -30,12 +28,7 @@ def signup():
 
     if not username or not email or not password:
         return jsonify({
-            "error": "Username, email, and password are required"
-        }), 400
-
-    if len(password) < 6:
-        return jsonify({
-            "error": "Password must be at least 6 characters"
+            "error": "Username, email and password are required"
         }), 400
 
     existing_user = User.query.filter(
@@ -58,8 +51,6 @@ def signup():
     db.session.add(user)
     db.session.commit()
 
-    session["user_id"] = user.id
-
     return jsonify({
         "message": "Account created successfully",
         "user": user.to_dict()
@@ -72,11 +63,6 @@ def login():
 
     email = data.get("email", "").strip().lower()
     password = data.get("password", "")
-
-    if not email or not password:
-        return jsonify({
-            "error": "Email and password are required"
-        }), 400
 
     user = User.query.filter_by(email=email).first()
 
@@ -93,6 +79,15 @@ def login():
     return jsonify({
         "message": "Login successful",
         "user": user.to_dict()
+    }), 200
+
+
+@main.route("/logout", methods=["POST"])
+def logout():
+    session.clear()
+
+    return jsonify({
+        "message": "Logged out successfully"
     }), 200
 
 
@@ -120,10 +115,191 @@ def check_session():
     }), 200
 
 
-@main.route("/logout", methods=["POST"])
-def logout():
-    session.clear()
+# -------------------------
+# FoodLog Helper
+# -------------------------
+
+def get_current_user():
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return None
+
+    return db.session.get(User, user_id)
+
+
+# -------------------------
+# FoodLog CRUD
+# -------------------------
+
+@main.route("/food-logs", methods=["GET"])
+def get_food_logs():
+    user = get_current_user()
+
+    if not user:
+        return jsonify({
+            "error": "Authentication required"
+        }), 401
+
+    page = request.args.get("page", 1, type=int)
+    per_page = request.args.get("per_page", 10, type=int)
+
+    page = max(page, 1)
+    per_page = min(max(per_page, 1), 50)
+
+    pagination = FoodLog.query.filter_by(
+        user_id=user.id
+    ).order_by(
+        FoodLog.created_at.desc()
+    ).paginate(
+        page=page,
+        per_page=per_page,
+        error_out=False
+    )
 
     return jsonify({
-        "message": "Logged out successfully"
+        "food_logs": [
+            food_log.to_dict()
+            for food_log in pagination.items
+        ],
+        "pagination": {
+            "page": pagination.page,
+            "per_page": pagination.per_page,
+            "total": pagination.total,
+            "pages": pagination.pages,
+            "has_next": pagination.has_next,
+            "has_prev": pagination.has_prev
+        }
     }), 200
+
+
+@main.route("/food-logs", methods=["POST"])
+def create_food_log():
+    user = get_current_user()
+
+    if not user:
+        return jsonify({
+            "error": "Authentication required"
+        }), 401
+
+    data = request.get_json() or {}
+
+    product_name = data.get("product_name", "").strip()
+
+    if not product_name:
+        return jsonify({
+            "error": "Product name is required"
+        }), 400
+
+    food_log = FoodLog(
+        product_name=product_name,
+        barcode=data.get("barcode"),
+        notes=data.get("notes"),
+        rating=data.get("rating"),
+        user_id=user.id
+    )
+
+    db.session.add(food_log)
+    db.session.commit()
+
+    return jsonify({
+        "message": "Food log created successfully",
+        "food_log": food_log.to_dict()
+    }), 201
+
+
+@main.route("/food-logs/<int:food_log_id>", methods=["GET"])
+def get_food_log(food_log_id):
+    user = get_current_user()
+
+    if not user:
+        return jsonify({
+            "error": "Authentication required"
+        }), 401
+
+    food_log = FoodLog.query.filter_by(
+        id=food_log_id,
+        user_id=user.id
+    ).first()
+
+    if not food_log:
+        return jsonify({
+            "error": "Food log not found"
+        }), 404
+
+    return jsonify({
+        "food_log": food_log.to_dict()
+    }), 200
+
+
+@main.route("/food-logs/<int:food_log_id>", methods=["PATCH"])
+def update_food_log(food_log_id):
+    user = get_current_user()
+
+    if not user:
+        return jsonify({
+            "error": "Authentication required"
+        }), 401
+
+    food_log = FoodLog.query.filter_by(
+        id=food_log_id,
+        user_id=user.id
+    ).first()
+
+    if not food_log:
+        return jsonify({
+            "error": "Food log not found"
+        }), 404
+
+    data = request.get_json() or {}
+
+    if "product_name" in data:
+        product_name = str(data["product_name"]).strip()
+
+        if not product_name:
+            return jsonify({
+                "error": "Product name cannot be empty"
+            }), 400
+
+        food_log.product_name = product_name
+
+    if "barcode" in data:
+        food_log.barcode = data["barcode"]
+
+    if "notes" in data:
+        food_log.notes = data["notes"]
+
+    if "rating" in data:
+        food_log.rating = data["rating"]
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Food log updated successfully",
+        "food_log": food_log.to_dict()
+    }), 200
+
+
+@main.route("/food-logs/<int:food_log_id>", methods=["DELETE"])
+def delete_food_log(food_log_id):
+    user = get_current_user()
+
+    if not user:
+        return jsonify({
+            "error": "Authentication required"
+        }), 401
+
+    food_log = FoodLog.query.filter_by(
+        id=food_log_id,
+        user_id=user.id
+    ).first()
+
+    if not food_log:
+        return jsonify({
+            "error": "Food log not found"
+        }), 404
+
+    db.session.delete(food_log)
+    db.session.commit()
+
+    return "", 204
