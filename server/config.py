@@ -1,14 +1,10 @@
 import os
-from dotenv import load_dotenv
-
-
-load_dotenv()
 
 
 class Config:
     SECRET_KEY = os.getenv(
         "SECRET_KEY",
-        "eco-afya-phase2-secret-key"
+        "eco-afya-development-secret-key"
     )
 
     SQLALCHEMY_DATABASE_URI = os.getenv(
@@ -19,5 +15,13 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     SESSION_COOKIE_HTTPONLY = True
-    SESSION_COOKIE_SAMESITE = "Lax"
-    SESSION_COOKIE_SECURE = False
+
+    SESSION_COOKIE_SAMESITE = os.getenv(
+        "SESSION_COOKIE_SAMESITE",
+        "Lax"
+    )
+
+    SESSION_COOKIE_SECURE = os.getenv(
+        "SESSION_COOKIE_SECURE",
+        "False"
+    ).lower() == "true"
