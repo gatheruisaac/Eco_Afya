@@ -20,7 +20,7 @@ function Products() {
       const response = await fetch("/api/products");
 
       if (!response.ok) {
-        throw new Error("Failed to fetch products");
+        throw new Error(`Failed to fetch products: ${response.status}`);
       }
 
       const data = await response.json();
@@ -67,12 +67,20 @@ function Products() {
     return (
       <main className="products-page">
         <section className="products-header">
-          <p className="eyebrow">SMART FOOD CHOICES</p>
+          <p className="eyebrow">ECO AFYA • FOOD DISCOVERY</p>
 
-          <h1>Explore Better Food Choices 🌱</h1>
+          <h1>Discover Food With More Insight.</h1>
 
-          <p>Loading products...</p>
+          <p>
+            We're bringing together nutritional and environmental information
+            to help you make smarter everyday choices.
+          </p>
         </section>
+
+        <div className="products-loading">
+          <div className="loading-spinner"></div>
+          <p>Discovering food products...</p>
+        </div>
       </main>
     );
   }
@@ -81,13 +89,13 @@ function Products() {
     return (
       <main className="products-page">
         <section className="products-header">
-          <p className="eyebrow">SMART FOOD CHOICES</p>
+          <p className="eyebrow">ECO AFYA • FOOD DISCOVERY</p>
 
-          <h1>Explore Better Food Choices 🌱</h1>
+          <h1>Discover Food With More Insight.</h1>
 
           <p>{error}</p>
 
-          <button onClick={fetchProducts}>
+          <button className="retry-button" onClick={fetchProducts}>
             Try Again
           </button>
         </section>
@@ -98,14 +106,30 @@ function Products() {
   return (
     <main className="products-page">
       <section className="products-header">
-        <p className="eyebrow">SMART FOOD CHOICES</p>
+        <p className="eyebrow">ECO AFYA • FOOD DISCOVERY</p>
 
-        <h1>Explore Better Food Choices 🌱</h1>
+        <h1>Discover Food With More Insight.</h1>
 
         <p>
-          Discover nutritional and environmental information to help you
-          make healthier, more sustainable food choices.
+          Explore products from around the world and see the nutritional and
+          environmental information behind everyday food choices.
         </p>
+      </section>
+
+      <section className="products-toolbar">
+        <div>
+          <span className="products-count">
+            {products.length} products
+          </span>
+
+          <span className="products-description">
+            Curated food discoveries
+          </span>
+        </div>
+
+        <div className="products-badge">
+          🌍 Global Food Data
+        </div>
       </section>
 
       <section className="products-grid">

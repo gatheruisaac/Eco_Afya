@@ -1,63 +1,89 @@
-# 🥑 Eco Afya
+# Eco Afya 🌱
 
-Eco Afya is a React web application that helps users explore food products and make healthier, more sustainable choices by surfacing nutritional and environmental information sourced from the Open Food Facts API.
+Eco Afya is a React-based web application that helps users make more informed food choices by combining nutritional, health, and environmental information in one place.
 
-## ✨ Features
+The application uses data from the Open Food Facts API to allow users to explore food products, view nutritional information, check sustainability scores, and save their favorite products.
 
-- 🏠 Home page introduction
-- 🛍️ Product browsing
-- 🔎 Product detail views
-- ❤️ Favorites with persistent storage
-- 🌱 Eco-Score ratings
-- 🥗 Nutritional information
-- ℹ️ About page
+## Features
 
-### 🏠 Home Page
-The home page introduces Eco Afya and provides users with an easy way to begin exploring food products.
+- 🌱 Browse food products from Open Food Facts
+- 🔎 View detailed information about individual products
+- 🥗 View nutritional information including:
+  - Energy
+  - Sugars
+  - Fat
+  - Protein
+  - Salt
+  - Carbohydrates
+- 🌍 View Nutri-Score and Eco-Score information
+- ❤️ Save favorite products using local storage
+- 📝 Create and manage personal food logs
+- 👤 User authentication pages
+- 📱 Responsive design for desktop, tablet, and mobile devices
+- ⚠️ Loading and error states for API requests
+- 🧭 Client-side navigation using React Router
 
-### 🛍️ Products
-Users can browse food products retrieved from the Open Food Facts API.
-Each product can display:
-- Product name
-- Product image
-- Brand
-- Nutri-Score
-- Eco-Score
+## Technologies Used
 
-### 🔎 Product Details
-Users can select a product to view additional information about that specific product.
+- React
+- Vite
+- JavaScript
+- CSS
+- React Router
+- Open Food Facts API
+- Local Storage
+- Vercel
 
-### ❤️ Favorites
-Users can save products to their favorites.
-Favorites are stored using the browser's `localStorage`, allowing them to remain available when the user navigates between pages.
+## API
 
-### ℹ️ About Page
-The About page explains the purpose of Eco Afya and the project's goal of encouraging healthier and more sustainable food choices.
+Eco Afya uses the Open Food Facts API to retrieve food product information.
 
-## 🌐 API
-Eco Afya uses the Open Food Facts API.
+Open Food Facts provides information about food products, including product names, brands, ingredients, nutritional values, Nutri-Score, and Eco-Score.
 
-API documentation:
+API website:
+
 https://world.openfoodfacts.org/
 
-The application retrieves product information including nutritional and environmental data.
+## API Endpoints
 
-## 🛠️ Technologies Used
-- React
-- JavaScript
-- React Router
-- Vite
-- CSS
-- Open Food Facts API
-- Vercel
-- Git & GitHub
-- Browser localStorage
+The Flask backend exposes the following endpoints. All request/response bodies are JSON.
 
-## 📂 Project Structure
+> Paths below follow standard REST conventions for this project's blueprints (auth, favorites, products). Double-check each path against your actual Flask route definitions and update as needed.
+
+### Auth (`/api/auth`)
+
+| Method | Endpoint | Description | Auth Required |
+|---|---|---|---|
+| POST | `/api/auth/register` | Register a new user (email, password) | No |
+| POST | `/api/auth/login` | Log in and receive a JWT access token | No |
+| GET | `/api/auth/me` | Get the currently authenticated user's profile | Yes (JWT) |
+
+### Favorites (`/api/favorites`)
+
+| Method | Endpoint | Description | Auth Required |
+|---|---|---|---|
+| GET | `/api/favorites?page=1&per_page=10` | List the current user's favorites (paginated) | Yes (JWT) |
+| POST | `/api/favorites` | Add a product to favorites (product id/barcode, notes, rating) | Yes (JWT) |
+| GET | `/api/favorites/:id` | Get a single favorite entry | Yes (JWT) |
+| PATCH | `/api/favorites/:id` | Update a favorite (e.g. notes, rating) | Yes (JWT) |
+| DELETE | `/api/favorites/:id` | Remove a favorite | Yes (JWT) |
+
+Favorites are scoped to the authenticated user — a user can only view, edit, or delete their own favorites.
+
+### Products (`/api/products`)
+
+| Method | Endpoint | Description | Auth Required |
+|---|---|---|---|
+| GET | `/api/products?q=:query` | Search/proxy product data from Open Food Facts | No |
+| GET | `/api/products/:barcode` | Get details for a single product by barcode | No |
+
+## Project Structure
+
 ```text
 Eco_Afya/
 ├── api/
 │   └── products.js
+├── public/
 ├── src/
 │   ├── components/
 │   │   ├── Navbar.jsx
@@ -67,49 +93,48 @@ Eco_Afya/
 │   │   ├── Products.jsx
 │   │   ├── ProductDetails.jsx
 │   │   ├── Favorites.jsx
+│   │   ├── FoodLogs.jsx
+│   │   ├── Login.jsx
+│   │   ├── Signup.jsx
 │   │   └── About.jsx
 │   ├── App.jsx
-│   ├── App.css
-│   └── index.css
-├── public/
+│   ├── index.css
+│   └── main.jsx
+├── index.html
 ├── package.json
-├── vercel.json
+├── vite.config.js
 └── README.md
 ```
 
-## ⚙️ Getting Started
+## Getting Started
 
-1. Clone the repository
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/gatheruisaac/Eco_Afya.git
 ```
 
-2. Navigate into the project
+### 2. Navigate into the project
 
 ```bash
 cd Eco_Afya
 ```
 
-3. Install dependencies
+### 3. Install dependencies
 
 ```bash
 npm install
 ```
 
-4. Start the development server
+### 4. Start the development server
 
 ```bash
 npm run dev
 ```
 
-The application will normally be available at:
+The application will be available at the local development URL provided by Vite.
 
-```
-http://localhost:5173
-```
-
-5. Build the project
+### Building for Production
 
 To create a production build:
 
@@ -117,42 +142,88 @@ To create a production build:
 npm run build
 ```
 
-## 🌍 Deployment
+To preview the production build locally:
+
+```bash
+npm run preview
+```
+
+## Main Routes
+
+| Route | Description |
+|---|---|
+| `/` | Home page |
+| `/products` | Browse food products |
+| `/products/:barcode` | View detailed product information |
+| `/favorites` | View saved favorite products |
+| `/foodlogs` | Create and view food logs |
+| `/about` | Learn more about Eco Afya |
+| `/login` | User login |
+| `/signup` | User registration |
+
+## Favorites
+
+Favorite products are stored in the browser using Local Storage.
+
+This allows users to save products and access their favorites without requiring a database.
+
+## Food Logs
+
+The Food Logs feature allows users to record foods they have consumed and keep track of their food choices.
+
+Users can add information such as:
+
+- Food name
+- Date
+- Meal
+- Rating
+- Notes
+
+Users can also delete existing food log entries.
+
+## Error Handling
+
+Eco Afya includes loading and error states when communicating with external APIs.
+
+If product information cannot be retrieved, users are shown an appropriate error message instead of a broken page.
+
+## Responsive Design
+
+The application is designed to work across different screen sizes.
+
+Responsive layouts are provided for:
+
+- Desktop
+- Tablet
+- Mobile
+
+## Deployment
+
 Eco Afya is deployed using Vercel.
 
 Live application:
+
 https://eco-afya.vercel.app/
 
-The project is connected to GitHub, allowing updates to be deployed from the main branch.
+## Purpose
 
-## 🧪 Testing
-Before deployment, the main user flows should be tested:
+The goal of Eco Afya is to make food information easier to understand by presenting nutritional and environmental information together.
 
-- [ ] Navigate between all pages
-- [ ] Browse products
-- [ ] Open product details
-- [ ] Add and remove favorites
-- [ ] Refresh the application
-- [ ] Test responsive layouts
-- [ ] Test API loading and error states
+Instead of looking only at calories or nutritional values, users can consider both their health and the environmental impact of their food choices.
 
-## 🎯 Project Goals
-The main goals of Eco Afya are to:
+## Future Improvements
 
-1. Demonstrate practical React development skills.
-2. Consume and display data from an external API.
-3. Implement reusable React components.
-4. Implement client-side routing.
-5. Manage application state with React hooks.
-6. Persist favorites using localStorage.
-7. Handle loading and error states.
-8. Deploy a React application to the web.
-9. Encourage healthier and more sustainable food choices.
+Possible future improvements include:
 
-## 👨‍💻 Author
+- User accounts with persistent cloud storage
+- More advanced food search and filtering
+- Product comparison functionality
+- Personalized nutrition recommendations
+- Food consumption statistics and charts
+- Improved authentication and backend data storage
+
+## Author
+
 **Isaac Gatheru Kanyua**
-Moringa School Student
-Software Engineer | Frontend Developer
 
-## 📄 License
-This project was created for educational purposes as part of a Moringa School React project.
+Built as a Moringa School Phase 2 React project

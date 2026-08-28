@@ -48,49 +48,79 @@ function Login({ onLogin }) {
 
   return (
     <main className="auth-page">
-      <section className="auth-card">
-        <p className="eyebrow">WELCOME BACK</p>
+      <section className="auth-layout">
+        <div className="auth-visual">
+          <div className="auth-visual-content">
+            <p className="eyebrow">WELCOME BACK 🌱</p>
 
-        <h1>Login to Eco Afya</h1>
+            <h1>
+              Your food journey
+              <span> continues.</span>
+            </h1>
 
-        <p className="auth-description">
-          Sign in to manage your personal food logs.
-        </p>
+            <p>
+              Sign in to keep track of your food discoveries, ratings,
+              favorites, and personal notes.
+            </p>
 
-        {error && <p className="error-message">{error}</p>}
+            <div className="auth-fruits">
+              <span>🥑</span>
+              <span>🍓</span>
+              <span>🍊</span>
+              <span>🥕</span>
+              <span>🍋</span>
+            </div>
+          </div>
+        </div>
 
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="email">Email</label>
+        <section className="auth-card">
+          <div className="auth-card-header">
+            <div className="auth-icon">🌱</div>
 
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder="Enter your email"
-            required
-          />
+            <p className="eyebrow">WELCOME BACK</p>
 
-          <label htmlFor="password">Password</label>
+            <h2>Login to Eco Afya</h2>
 
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            placeholder="Enter your password"
-            required
-          />
+            <p className="auth-description">
+              Sign in to manage your personal food logs.
+            </p>
+          </div>
 
-          <button type="submit" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
+          {error && <p className="error-message">{error}</p>}
 
-        <p className="auth-footer">
-          Don't have an account?{" "}
-          <Link to="/signup">Create one</Link>
-        </p>
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="email">Email Address</label>
+
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="you@example.com"
+              required
+            />
+
+            <label htmlFor="password">Password</label>
+
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              placeholder="Enter your password"
+              required
+            />
+
+            <button type="submit" disabled={loading}>
+              {loading ? "Logging in..." : "Login →"}
+            </button>
+          </form>
+
+          <p className="auth-footer">
+            Don't have an account?{" "}
+            <Link to="/signup">Create one</Link>
+          </p>
+        </section>
       </section>
     </main>
   );

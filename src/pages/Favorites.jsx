@@ -6,66 +6,101 @@ function Favorites() {
   );
 
   return (
-    <main className="products-page">
-      <section className="products-header">
-        <p className="eyebrow">YOUR COLLECTION</p>
+    <main className="favorites-page">
+      <section className="favorites-header">
+        <p className="eyebrow">YOUR FOOD COLLECTION</p>
 
-        <h1>Favorite Foods ❤️</h1>
+        <h1>
+          Your Favorites <span>❤️</span>
+        </h1>
 
         <p>
-          Keep track of products you want to compare or explore later.
+          Keep the products you love close and come back to them whenever
+          you need inspiration.
         </p>
       </section>
 
       {favorites.length === 0 ? (
-        <section className="empty-favorites">
-          <h2>No favorites yet</h2>
+        <section className="favorites-empty">
+          <div className="favorites-empty-icon">🍓</div>
+
+          <p className="card-label">NOTHING SAVED YET</p>
+
+          <h2>Your favorite foods will appear here.</h2>
 
           <p>
-            Browse our products and click the ♡ button to save your
-            favorites.
+            Explore our products and tap the heart on anything you want to
+            remember.
           </p>
 
-          <Link to="/products" className="details-button">
-            Explore Products
+          <Link to="/products" className="hero-button">
+            Explore Products →
           </Link>
         </section>
       ) : (
-        <section className="products-grid">
-          {favorites.map((product) => (
-            <article className="product-card" key={product.code}>
-              <div className="product-image-container">
-                <img
-                  src={product.image_front_small_url}
-                  alt={product.product_name || "Food product"}
-                  className="product-image"
-                />
-              </div>
+        <section className="favorites-content">
+          <div className="favorites-summary">
+            <div>
+              <p className="card-label">YOUR COLLECTION</p>
+              <h2>{favorites.length} Saved Product{favorites.length !== 1 ? "s" : ""}</h2>
+            </div>
 
-              <div className="product-info">
-                <h2>{product.product_name || "Unknown product"}</h2>
+            <span className="favorites-count">
+              ❤️ {favorites.length}
+            </span>
+          </div>
 
-                <div className="product-scores">
-                  <span className="score nutrition">
-                    Nutri-Score:{" "}
-                    {product.nutriscore_grade?.toUpperCase() || "N/A"}
-                  </span>
-
-                  <span className="score environment">
-                    Eco-Score:{" "}
-                    {product.ecoscore_grade?.toUpperCase() || "N/A"}
-                  </span>
+          <div className="favorites-grid">
+            {favorites.map((product) => (
+              <article className="favorite-card" key={product.code}>
+                <div className="favorite-image">
+                  {product.image_front_small_url ? (
+                    <img
+                      src={product.image_front_small_url}
+                      alt={product.product_name || "Food product"}
+                    />
+                  ) : (
+                    <span>🥗</span>
+                  )}
                 </div>
 
-                <Link
-                  to={`/products/${product.code}`}
-                  className="details-button"
-                >
-                  View Details →
-                </Link>
-              </div>
-            </article>
-          ))}
+                <div className="favorite-info">
+                  <p className="product-category">SAVED FOOD</p>
+
+                  <h2>
+                    {product.product_name || "Unknown product"}
+                  </h2>
+
+                  <p className="favorite-brand">
+                    {product.brands || "Food product"}
+                  </p>
+
+                  <div className="favorite-scores">
+                    <div className="favorite-score nutrition">
+                      <small>Nutri-Score</small>
+                      <strong>
+                        {product.nutriscore_grade?.toUpperCase() || "N/A"}
+                      </strong>
+                    </div>
+
+                    <div className="favorite-score environment">
+                      <small>Eco-Score</small>
+                      <strong>
+                        {product.ecoscore_grade?.toUpperCase() || "N/A"}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <Link
+                    to={`/products/${product.code}`}
+                    className="details-button"
+                  >
+                    View Details →
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
         </section>
       )}
     </main>

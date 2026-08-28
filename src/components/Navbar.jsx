@@ -11,31 +11,33 @@ function Navbar({ user, onLogout }) {
   return (
     <header className="navbar">
       <div className="nav-container">
-
         <NavLink to="/" className="logo">
-          🌱 Eco Afya
+          <span className="logo-icon">🌱</span>
+          <span>Eco Afya</span>
         </NavLink>
 
         <nav className="nav-links">
-          <NavLink to="/">Home</NavLink>
+          <NavLink to="/" end>
+            🏠 Home
+          </NavLink>
 
           <NavLink to="/products">
-            Products
+            🥗 Explore
           </NavLink>
 
           <NavLink to="/favorites">
-            Favorites
-          </NavLink>
-
-          <NavLink to="/about">
-            About
+            ❤️ Favorites
           </NavLink>
 
           {user && (
             <NavLink to="/food-logs">
-              My Food Logs
+              📋 Food Log
             </NavLink>
           )}
+
+          <NavLink to="/about">
+            🌍 About
+          </NavLink>
 
           {!user && (
             <>
@@ -43,8 +45,8 @@ function Navbar({ user, onLogout }) {
                 Login
               </NavLink>
 
-              <NavLink to="/signup">
-                Sign Up
+              <NavLink to="/signup" className="signup-link">
+                Get Started
               </NavLink>
             </>
           )}
@@ -59,7 +61,6 @@ function Navbar({ user, onLogout }) {
             </button>
           )}
         </nav>
-
       </div>
     </header>
   );

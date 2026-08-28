@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 function Signup() {
   const navigate = useNavigate();
 
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -28,7 +28,7 @@ function Signup() {
         },
         credentials: "include",
         body: JSON.stringify({
-          name,
+          username,
           email,
           password,
         }),
@@ -55,13 +55,19 @@ function Signup() {
 
   return (
     <main className="auth-page">
+      <div className="auth-decoration auth-decoration-one">🍓</div>
+      <div className="auth-decoration auth-decoration-two">🥭</div>
+
       <section className="auth-card">
+        <div className="auth-icon">🌱</div>
+
         <p className="eyebrow">GET STARTED</p>
 
-        <h1>Create your Eco Afya account</h1>
+        <h1>Join the Eco Afya community</h1>
 
         <p className="auth-description">
-          Create an account to save and manage your personal food logs.
+          Create your account and start making smarter choices for your
+          health and the planet.
         </p>
 
         {error && <p className="error-message">{error}</p>}
@@ -69,29 +75,29 @@ function Signup() {
         {success && <p className="success-message">{success}</p>}
 
         <form onSubmit={handleSubmit}>
-          <label htmlFor="name">Name</label>
+          <label htmlFor="username">Your name</label>
 
           <input
-            id="name"
+            id="username"
             type="text"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
             placeholder="Enter your name"
             required
           />
 
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">Email address</label>
 
           <input
             id="email"
             type="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            placeholder="Enter your email"
+            placeholder="you@example.com"
             required
           />
 
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">Create password</label>
 
           <input
             id="password"
@@ -103,7 +109,7 @@ function Signup() {
           />
 
           <button type="submit" disabled={loading}>
-            {loading ? "Creating account..." : "Create Account"}
+            {loading ? "Creating account..." : "Create My Account →"}
           </button>
         </form>
 

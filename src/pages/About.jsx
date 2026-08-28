@@ -2,60 +2,127 @@ function About() {
   return (
     <main className="about-page">
       <section className="about-hero">
-        <p className="eyebrow">ABOUT ECO AFYA</p>
+        <div className="about-hero-content">
+          <p className="eyebrow">ABOUT ECO AFYA</p>
 
-        <h1>Better Choices for People and the Planet 🌱</h1>
+          <h1>
+            Better choices start with better
+            <span> information.</span>
+          </h1>
 
-        <p>
-          Eco Afya is a food information platform designed to help people
-          understand the nutritional and environmental impact of the
-          products they buy.
-        </p>
+          <p>
+            Eco Afya brings nutrition, sustainability, and food discovery
+            together in one simple experience.
+          </p>
+        </div>
+
+        <div className="about-hero-visual">
+          <div className="about-circle">
+            <span>🌍</span>
+          </div>
+
+          <div className="about-fruit fruit-a">🍊</div>
+          <div className="about-fruit fruit-b">🍓</div>
+          <div className="about-fruit fruit-c">🥑</div>
+          <div className="about-fruit fruit-d">🍋</div>
+        </div>
       </section>
 
-      <section className="about-grid">
-        <article className="about-card">
-          <div className="about-icon">🥗</div>
+      <section className="about-story">
+        <div className="about-story-card">
+          <p className="eyebrow">OUR MISSION</p>
 
-          <h2>Nutrition Matters</h2>
-
-          <p>
-            Eco Afya provides Nutri-Score information to help users
-            understand the nutritional quality of food products.
-          </p>
-        </article>
-
-        <article className="about-card">
-          <div className="about-icon">🌍</div>
-
-          <h2>Protect Our Planet</h2>
+          <h2>
+            Making food information easier to understand.
+          </h2>
 
           <p>
-            Environmental information helps users consider the impact
-            their food choices can have on the planet.
+            Choosing what to eat can be complicated. Eco Afya helps simplify
+            that decision by bringing important food information into one
+            place.
           </p>
-        </article>
-
-        <article className="about-card">
-          <div className="about-icon">💡</div>
-
-          <h2>Informed Decisions</h2>
 
           <p>
-            Our goal is to make food information easier to understand so
-            users can make informed everyday decisions.
+            From nutritional scores to environmental impact, our goal is to
+            help people understand the products they consume and make choices
+            that are better for themselves and the planet.
           </p>
-        </article>
+        </div>
+
+        <div className="about-values">
+          <div className="value-card value-green">
+            <span>🥗</span>
+            <h3>Health</h3>
+            <p>
+              Understand nutritional information and make informed food
+              decisions.
+            </p>
+          </div>
+
+          <div className="value-card value-orange">
+            <span>🌎</span>
+            <h3>Sustainability</h3>
+            <p>
+              Discover environmental information and consider the impact of
+              your food choices.
+            </p>
+          </div>
+
+          <div className="value-card value-purple">
+            <span>💡</span>
+            <h3>Awareness</h3>
+            <p>
+              Turn complex product information into simple, useful insights.
+            </p>
+          </div>
+
+          <div className="value-card value-pink">
+            <span>❤️</span>
+            <h3>Personal Choice</h3>
+            <p>
+              Save products, track your food journey, and build your own
+              collection.
+            </p>
+          </div>
+        </div>
       </section>
 
-      <section className="about-mission">
-        <h2>Our Mission</h2>
+      <section className="about-data">
+        <div className="data-icon">🌱</div>
+
+        <div>
+          <p className="eyebrow">POWERED BY OPEN FOOD FACTS</p>
+
+          <h2>
+            Food information from a global open database.
+          </h2>
+
+          <p>
+            Eco Afya uses data from Open Food Facts to provide product,
+            nutrition, ingredient, and environmental information.
+          </p>
+        </div>
+      </section>
+
+      <section className="about-final">
+        <p className="eyebrow">THE ECO AFYA IDEA</p>
+
+        <h2>
+          Small food decisions can make a
+          <span> big difference.</span>
+        </h2>
 
         <p>
-          Eco Afya combines nutritional and environmental information
-          from Open Food Facts into a simple and accessible experience.
-          We believe that better information can lead to better choices.
+          Eat with awareness. Choose with confidence. Think about tomorrow.
         </p>
+
+        <div className="about-final-icons">
+          <span>🥑</span>
+          <span>🍎</span>
+          <span>🥕</span>
+          <span>🍓</span>
+          <span>🌍</span>
+        </div>
       </section>
     </main>
   );
