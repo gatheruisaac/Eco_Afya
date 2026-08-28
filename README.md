@@ -1,93 +1,133 @@
 # Eco Afya 🌱
 
-Eco Afya is a React-based web application that helps users make more informed food choices by combining nutritional, health, and environmental information in one place.
+Eco Afya is a full-stack web application that helps users make more informed and sustainable food choices by combining nutritional, health, and environmental information in one place.
 
-The application uses data from the Open Food Facts API to allow users to explore food products, view nutritional information, check sustainability scores, and save their favorite products.
+The application allows users to explore food products using data from the Open Food Facts API, view nutritional and sustainability information, save favorite products, and maintain personal food logs.
+
+For Phase 2, Eco Afya was expanded into a full-stack application using **React on the frontend, Flask on the backend, and PostgreSQL for persistent data storage**. User authentication and ownership controls ensure that users can only access and manage their own personal records.
+
+---
 
 ## Features
 
-- 🌱 Browse food products from Open Food Facts
-- 🔎 View detailed information about individual products
-- 🥗 View nutritional information including:
-  - Energy
-  - Sugars
-  - Fat
-  - Protein
-  - Salt
-  - Carbohydrates
-- 🌍 View Nutri-Score and Eco-Score information
-- ❤️ Save favorite products using local storage
-- 📝 Create and manage personal food logs
-- 👤 User authentication pages
-- 📱 Responsive design for desktop, tablet, and mobile devices
-- ⚠️ Loading and error states for API requests
-- 🧭 Client-side navigation using React Router
+* 🌱 Browse food products from Open Food Facts
+* 🔎 View detailed information about individual products
+* 🥗 View nutritional information including:
 
-## Technologies Used
+  * Energy
+  * Sugars
+  * Fat
+  * Protein
+  * Salt
+  * Carbohydrates
+* 🌍 View Nutri-Score and Eco-Score information
+* ❤️ Save favorite products
+* 📝 Create and manage personal food logs
+* 👤 User registration and login
+* 🔐 Session-based authentication
+* 🛡️ User ownership protection for personal records
+* ✏️ Create, read, update, and delete food log records
+* 🗑️ Delete personal food log entries
+* 📄 Paginated backend data retrieval
+* ⚠️ Loading and error states
+* 🧭 Client-side navigation using React Router
+* 📱 Responsive design for desktop, tablet, and mobile devices
+* 🌐 RESTful Flask API
+* 🗄️ PostgreSQL database for persistent user and food-log data
 
-- React
-- Vite
-- JavaScript
-- CSS
-- React Router
-- Open Food Facts API
-- Local Storage
-- Vercel
+---
 
-## API
+# Technologies Used
 
-Eco Afya uses the Open Food Facts API to retrieve food product information.
+## Frontend
 
-Open Food Facts provides information about food products, including product names, brands, ingredients, nutritional values, Nutri-Score, and Eco-Score.
+* React
+* Vite
+* JavaScript
+* CSS
+* React Router
+* Fetch API
+* Local Storage
 
-API website:
+## Backend
 
-https://world.openfoodfacts.org/
+* Python
+* Flask
+* Flask-SQLAlchemy
+* Flask-Migrate
+* Flask-Bcrypt
+* Flask-CORS
+* RESTful API
 
-## API Endpoints
+## Database
 
-The Flask backend exposes the following endpoints. All request/response bodies are JSON.
+* PostgreSQL
+* SQLAlchemy ORM
 
-> Paths below follow standard REST conventions for this project's blueprints (auth, favorites, products). Double-check each path against your actual Flask route definitions and update as needed.
+## External API
 
-### Auth (`/api/auth`)
+* Open Food Facts API
 
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| POST | `/api/auth/register` | Register a new user (email, password) | No |
-| POST | `/api/auth/login` | Log in and receive a JWT access token | No |
-| GET | `/api/auth/me` | Get the currently authenticated user's profile | Yes (JWT) |
+## Deployment
 
-### Favorites (`/api/favorites`)
+* Vercel — React frontend
+* Render — Flask backend
+* PostgreSQL — persistent database
 
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| GET | `/api/favorites?page=1&per_page=10` | List the current user's favorites (paginated) | Yes (JWT) |
-| POST | `/api/favorites` | Add a product to favorites (product id/barcode, notes, rating) | Yes (JWT) |
-| GET | `/api/favorites/:id` | Get a single favorite entry | Yes (JWT) |
-| PATCH | `/api/favorites/:id` | Update a favorite (e.g. notes, rating) | Yes (JWT) |
-| DELETE | `/api/favorites/:id` | Remove a favorite | Yes (JWT) |
+---
 
-Favorites are scoped to the authenticated user — a user can only view, edit, or delete their own favorites.
+# System Architecture
 
-### Products (`/api/products`)
+Eco Afya follows a full-stack client-server architecture.
 
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| GET | `/api/products?q=:query` | Search/proxy product data from Open Food Facts | No |
-| GET | `/api/products/:barcode` | Get details for a single product by barcode | No |
+```text
+                    ┌──────────────────────┐
+                    │      User / Browser  │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │   React Frontend     │
+                    │      Vite            │
+                    └──────────┬───────────┘
+                               │
+                 HTTP Requests / JSON Responses
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │    Flask Backend     │
+                    │     REST API         │
+                    └───────┬───────┬──────┘
+                            │       │
+                ┌───────────┘       └─────────────┐
+                ▼                                 ▼
+       ┌──────────────────┐              ┌──────────────────┐
+       │   PostgreSQL     │              │ Open Food Facts  │
+       │    Database      │              │       API        │
+       └──────────────────┘              └──────────────────┘
+```
 
-## Project Structure
+The React frontend communicates with the Flask backend using HTTP requests. The Flask backend handles authentication, database operations, authorization, and communication with external services.
+
+---
+
+# Project Structure
+
+The project is organized into separate frontend and backend applications.
 
 ```text
 Eco_Afya/
+│
 ├── api/
 │   └── products.js
+│
 ├── public/
+│
 ├── src/
 │   ├── components/
 │   │   ├── Navbar.jsx
 │   │   └── ProductCard.jsx
+│   │
 │   ├── pages/
 │   │   ├── Home.jsx
 │   │   ├── Products.jsx
@@ -97,46 +137,410 @@ Eco_Afya/
 │   │   ├── Login.jsx
 │   │   ├── Signup.jsx
 │   │   └── About.jsx
+│   │
 │   ├── App.jsx
 │   ├── index.css
 │   └── main.jsx
+│
+├── server/
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── models.py
+│   │   └── routes.py
+│   │
+│   ├── migrations/
+│   │   └── versions/
+│   │
+│   ├── instance/
+│   │
+│   ├── .env
+│   ├── config.py
+│   ├── run.py
+│   └── requirements.txt
+│
 ├── index.html
 ├── package.json
 ├── vite.config.js
+├── vercel.json
+├── .gitignore
 └── README.md
 ```
 
-## Getting Started
+---
 
-### 1. Clone the repository
+# Backend Structure
+
+The Flask backend is located inside the `server/` directory.
+
+### `server/app/__init__.py`
+
+Creates and configures the Flask application.
+
+It initializes the application extensions, database, authentication functionality, CORS configuration, and routes.
+
+### `server/app/models.py`
+
+Contains the SQLAlchemy database models.
+
+The application uses relational database resources including:
+
+* Users
+* Food Logs
+
+Users are related to their food log records.
+
+### `server/app/routes.py`
+
+Contains the Flask REST API routes.
+
+The routes handle:
+
+* User registration
+* User login
+* User logout
+* Authentication checks
+* Food log creation
+* Food log retrieval
+* Food log updates
+* Food log deletion
+* Ownership authorization
+
+### `server/migrations/`
+
+Contains database migration files generated using Flask-Migrate.
+
+This allows database schema changes to be tracked and applied safely.
+
+---
+
+# Authentication
+
+Eco Afya implements user authentication using **Flask sessions**.
+
+Users can:
+
+1. Create an account.
+2. Log in using their email and password.
+3. Maintain an authenticated session.
+4. Access protected features.
+5. Log out of the application.
+
+Passwords are not stored as plain text. Passwords are hashed using **Flask-Bcrypt** before being stored in the database.
+
+The backend verifies the password hash during login.
+
+---
+
+# Authorization and Ownership
+
+Personal food-log data is protected by user ownership.
+
+Each food log belongs to a specific authenticated user.
+
+The backend verifies the authenticated user's identity before allowing access to protected resources.
+
+This prevents one user from:
+
+* Viewing another user's food logs
+* Updating another user's food logs
+* Deleting another user's food logs
+
+Authorization is enforced on the **backend**, rather than relying only on frontend restrictions.
+
+---
+
+# REST API Endpoints
+
+The Flask backend exposes RESTful API endpoints.
+
+## Authentication
+
+| Method | Endpoint  | Description               | Authentication |
+| ------ | --------- | ------------------------- | -------------- |
+| POST   | `/signup` | Create a new user account | No             |
+| POST   | `/login`  | Authenticate a user       | No             |
+| POST   | `/logout` | End the current session   | Yes            |
+
+---
+
+## Food Logs
+
+Food logs are associated with the currently authenticated user.
+
+| Method | Endpoint          | Description                   | Authentication |
+| ------ | ----------------- | ----------------------------- | -------------- |
+| GET    | `/food-logs`      | Retrieve the user's food logs | Yes            |
+| POST   | `/food-logs`      | Create a new food log         | Yes            |
+| PATCH  | `/food-logs/<id>` | Update a food log             | Yes            |
+| DELETE | `/food-logs/<id>` | Delete a food log             | Yes            |
+
+Food log records are ownership-protected so that users can only modify their own records.
+
+---
+
+# CRUD Functionality
+
+Eco Afya implements full CRUD functionality for the application's relational resources.
+
+### Create
+
+Authenticated users can create new food-log records.
+
+### Read
+
+Authenticated users can retrieve their own food logs.
+
+### Update
+
+Authenticated users can update their own food-log information.
+
+### Delete
+
+Authenticated users can delete their own food-log records.
+
+The backend uses SQLAlchemy to perform database operations.
+
+---
+
+# Pagination
+
+The backend supports pagination for relevant GET requests.
+
+Pagination allows the application to retrieve records in smaller groups rather than loading all records at once.
+
+Example:
+
+```text
+GET /food-logs?page=1&per_page=10
+```
+
+This improves performance and allows the application to scale as the number of records increases.
+
+---
+
+# Open Food Facts API
+
+Eco Afya integrates with the Open Food Facts API to retrieve food-product information.
+
+Open Food Facts provides information including:
+
+* Product names
+* Brands
+* Ingredients
+* Nutritional values
+* Nutri-Score
+* Eco-Score
+* Product images
+
+The frontend retrieves product information through the application's API layer.
+
+The application uses a Vercel serverless API endpoint to proxy Open Food Facts requests in the deployed frontend.
+
+---
+
+# Products API
+
+The application exposes a product endpoint:
+
+```text
+GET /api/products
+```
+
+This endpoint retrieves product information from Open Food Facts and returns the relevant product data as JSON.
+
+Example response structure:
+
+```json
+{
+  "products": [
+    {
+      "code": "3760049790214",
+      "product_name": "Pain De Mie Bio",
+      "brands": "La Boulangère",
+      "nutriscore_grade": "c",
+      "ecoscore_grade": "a-plus"
+    }
+  ]
+}
+```
+
+---
+
+# Favorites
+
+Users can save products as favorites.
+
+Favorite products are stored in browser Local Storage.
+
+The Local Storage key used by the application is:
+
+```text
+ecoAfyaFavorites
+```
+
+This allows users to save products without requiring every favorite-product action to be stored in the PostgreSQL database.
+
+---
+
+# Food Logs
+
+The Food Logs feature allows authenticated users to record foods they have consumed.
+
+Users can record information such as:
+
+* Food name
+* Date
+* Meal
+* Rating
+* Notes
+
+Users can view their food logs and manage their own records.
+
+The backend stores food-log information persistently in PostgreSQL.
+
+---
+
+# Main Frontend Routes
+
+| Route                | Description                       |
+| -------------------- | --------------------------------- |
+| `/`                  | Home page                         |
+| `/products`          | Browse food products              |
+| `/products/:barcode` | View detailed product information |
+| `/favorites`         | View saved favorite products      |
+| `/food-logs`         | Manage personal food logs         |
+| `/about`             | Learn more about Eco Afya         |
+| `/login`             | User login                        |
+| `/signup`            | User registration                 |
+
+Protected routes require authentication.
+
+---
+
+# Error Handling
+
+Eco Afya includes error handling throughout the application.
+
+Examples include:
+
+* Failed API requests
+* Invalid login credentials
+* Missing required form fields
+* Unauthorized requests
+* Loading states
+* Empty data states
+* Failed product requests
+* Database/API errors
+
+For example, when products cannot be loaded, the frontend displays an error message instead of leaving the page blank.
+
+---
+
+# Responsive Design
+
+The application is designed to work across different screen sizes.
+
+Responsive layouts are provided for:
+
+* Desktop
+* Tablet
+* Mobile
+
+The interface uses responsive CSS layouts to ensure that product cards, navigation, forms, and other components remain usable on different devices.
+
+---
+
+# Getting Started
+
+## 1. Clone the repository
 
 ```bash
 git clone https://github.com/gatheruisaac/Eco_Afya.git
 ```
 
-### 2. Navigate into the project
+## 2. Navigate into the project
 
 ```bash
 cd Eco_Afya
 ```
 
-### 3. Install dependencies
+## 3. Install frontend dependencies
 
 ```bash
 npm install
 ```
 
-### 4. Start the development server
+## 4. Set up the backend
+
+Navigate to the server directory:
+
+```bash
+cd server
+```
+
+Create and activate the Python virtual environment:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+Install backend dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+## 5. Configure environment variables
+
+Create a `.env` file inside the `server/` directory.
+
+Example:
+
+```env
+DATABASE_URL=your_postgresql_database_url
+SECRET_KEY=your_secret_key
+```
+
+Do not commit environment variables or passwords to GitHub.
+
+## 6. Run database migrations
+
+From the `server/` directory:
+
+```bash
+flask db upgrade
+```
+
+## 7. Start the Flask backend
+
+```bash
+flask run
+```
+
+The backend will run on the Flask development server.
+
+## 8. Start the React frontend
+
+Open another terminal and navigate to the project:
+
+```bash
+cd ~/Development5/Eco_Afya
+```
+
+Then run:
 
 ```bash
 npm run dev
 ```
 
-The application will be available at the local development URL provided by Vite.
+The Vite development server will provide the local frontend URL.
 
-### Building for Production
+---
 
-To create a production build:
+# Building for Production
+
+To create a production frontend build:
 
 ```bash
 npm run build
@@ -148,82 +552,83 @@ To preview the production build locally:
 npm run preview
 ```
 
-## Main Routes
+---
 
-| Route | Description |
-|---|---|
-| `/` | Home page |
-| `/products` | Browse food products |
-| `/products/:barcode` | View detailed product information |
-| `/favorites` | View saved favorite products |
-| `/foodlogs` | Create and view food logs |
-| `/about` | Learn more about Eco Afya |
-| `/login` | User login |
-| `/signup` | User registration |
+# Git Workflow
 
-## Favorites
+Git was used throughout development to track project milestones and changes.
 
-Favorite products are stored in the browser using Local Storage.
+Examples of meaningful commits include:
 
-This allows users to save products and access their favorites without requiring a database.
+```text
+feat: add application routing and pages
+feat: fetch food products from Open Food Facts
+feat: add Eco Afya about page
+feat: add favorites with local storage
+feat: add product details view
+feat: add authentication pages
+feat: add Flask backend
+feat: add user authentication
+feat: add food log CRUD
+fix: preserve serverless API routes on Vercel
+fix: resolve product API loading issue
+```
 
-## Food Logs
+The project uses `.gitignore` to prevent unnecessary files and sensitive configuration from being committed.
 
-The Food Logs feature allows users to record foods they have consumed and keep track of their food choices.
+Examples include:
 
-Users can add information such as:
+* `node_modules/`
+* Python virtual environments
+* `.env`
+* build output
+* Python cache files
 
-- Food name
-- Date
-- Meal
-- Rating
-- Notes
+---
 
-Users can also delete existing food log entries.
+# Deployment
 
-## Error Handling
+Eco Afya is deployed using Vercel for the frontend and Render for the Flask backend.
 
-Eco Afya includes loading and error states when communicating with external APIs.
+### Live Application
 
-If product information cannot be retrieved, users are shown an appropriate error message instead of a broken page.
+[Eco Afya Live Application](https://eco-afya.vercel.app/?utm_source=chatgpt.com)
 
-## Responsive Design
+### GitHub Repository
 
-The application is designed to work across different screen sizes.
+[Eco Afya GitHub Repository](https://github.com/gatheruisaac/Eco_Afya?utm_source=chatgpt.com)
 
-Responsive layouts are provided for:
+---
 
-- Desktop
-- Tablet
-- Mobile
-
-## Deployment
-
-Eco Afya is deployed using Vercel.
-
-Live application:
-
-https://eco-afya.vercel.app/
-
-## Purpose
+# Purpose
 
 The goal of Eco Afya is to make food information easier to understand by presenting nutritional and environmental information together.
 
-Instead of looking only at calories or nutritional values, users can consider both their health and the environmental impact of their food choices.
+Instead of considering only calories or nutritional values, users can also consider the environmental impact of their food choices.
 
-## Future Improvements
+Phase 2 extends this idea by allowing users to create accounts and maintain personal food-consumption records.
+
+---
+
+# Future Improvements
 
 Possible future improvements include:
 
-- User accounts with persistent cloud storage
-- More advanced food search and filtering
-- Product comparison functionality
-- Personalized nutrition recommendations
-- Food consumption statistics and charts
-- Improved authentication and backend data storage
+* Advanced food search and filtering
+* Product comparison
+* Personalized nutrition recommendations
+* Food consumption statistics and charts
+* Persistent database storage for favorites
+* More detailed user dashboards
+* Improved product categorization
+* AI-powered food recommendations
 
-## Author
+---
+
+# Author
 
 **Isaac Gatheru Kanyua**
 
-Built as a Moringa School Phase 2 React project
+Built as a **Moringa School Phase 2 Full-Stack Application**.
+
+---
