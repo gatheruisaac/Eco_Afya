@@ -1,5 +1,5 @@
 const API_URL =
-  "https://world.openfoodfacts.org/api/v2/search?categories_tags=en:plant-based-foods&page=1&page_size=20&fields=code,product_name,brands,image_front_small_url,image_front_url,nutriscore_grade,ecoscore_grade";
+  "https://au.openfoodfacts.org/api/v2/search?categories_tags=en:plant-based-foods&page=1&page_size=20&fields=code,product_name,brands,image_front_small_url,image_front_url,nutriscore_grade,ecoscore_grade";
 
 export default async function handler(req, res) {
   try {

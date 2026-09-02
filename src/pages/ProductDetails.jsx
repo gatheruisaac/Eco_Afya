@@ -67,7 +67,7 @@ function ProductDetails() {
 
   return (
     <main className="min-h-screen bg-[#071E17] text-white pb-20 selection:bg-[#CCFF00] selection:text-[#0A2E23]">
-      <div className="max-w-5xl mx-auto px-6 pt-10 space-y-8">
+      <div className="w-full max-w-5xl mx-auto px-6 pt-10 space-y-8">
         
         <Link
           to="/products"

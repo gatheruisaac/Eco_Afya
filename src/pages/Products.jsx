@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 function Products({ favorites, onFavorite }) {
   const [products, setProducts] = useState([]);
   const [query, setQuery] = useState("");
@@ -14,24 +12,28 @@ function Products({ favorites, onFavorite }) {
     setError("");
 
     try {
-      const endpoint = searchTerm.trim()
-        ? `https://world.openfoodfacts.org/api/v2/search?search_terms=${encodeURIComponent(
-            searchTerm
-          )}&page_size=20&fields=code,product_name,brands,image_front_small_url,nutriscore_grade,ecoscore_grade`
-        : `${API_URL}/products?page=1&per_page=20`;
-
-      const response = await fetch(endpoint);
+      const response = await fetch("/api/products");
       const data = await response.json();
 
       if (!response.ok) {
         throw new Error("Failed to load products");
       }
 
-      setProducts(data.products || []);
+      const loadedProducts = data.products || [];
+      const normalizedSearch = searchTerm.trim().toLowerCase();
+      setProducts(
+        normalizedSearch
+          ? loadedProducts.filter((product) =>
+              `${product.product_name || ""} ${product.brands || ""}`
+                .toLowerCase()
+                .includes(normalizedSearch)
+            )
+          : loadedProducts
+      );
     } catch (err) {
       console.error("Fetch products error:", err);
       setError("Unable to load products. Please try again.");
-    } flex {
+    } finally {
       setLoading(false);
     }
   };
@@ -47,7 +49,7 @@ function Products({ favorites, onFavorite }) {
 
   return (
     <main className="min-h-screen bg-[#071E17] text-white pb-20 selection:bg-[#CCFF00] selection:text-[#0A2E23]">
-      <div className="max-w-7xl mx-auto px-6 pt-10 space-y-10">
+      <div className="w-full max-w-7xl mx-auto px-6 pt-10 space-y-10">
         
         {/* HERO HEADER */}
         <section className="relative rounded-3xl bg-gradient-to-r from-[#0A2E23] via-emerald-950 to-[#071E17] p-8 sm:p-12 border border-emerald-800/50 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">

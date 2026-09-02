@@ -1,9 +1,6 @@
 import { Link } from "react-router-dom";
 
-function Favorites() {
-  const favorites = JSON.parse(
-    localStorage.getItem("ecoAfyaFavorites") || "[]"
-  );
+function Favorites({ favorites, onFavorite }) {
 
   return (
     <main className="favorites-page">
@@ -97,6 +94,13 @@ function Favorites() {
                   >
                     View Details →
                   </Link>
+                  <button
+                    type="button"
+                    onClick={() => onFavorite(product)}
+                    className="details-button"
+                  >
+                    Remove Favorite
+                  </button>
                 </div>
               </article>
             ))}

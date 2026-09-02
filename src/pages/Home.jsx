@@ -6,7 +6,7 @@ function Home() {
       
       {/* HERO SECTION */}
       <section className="relative max-w-7xl mx-auto px-6 pt-12 pb-20 lg:pt-20 lg:pb-28">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Left Text Column */}
           <div className="lg:col-span-7 space-y-6">
@@ -101,7 +101,7 @@ function Home() {
               {/* Floating Card 2 - Human Badge */}
               <div className="absolute -bottom-6 -right-6 bg-[#0A2E23]/90 backdrop-blur-md p-3.5 rounded-2xl border border-emerald-600/40 shadow-xl flex items-center gap-3 hidden sm:flex">
                 <img
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150"
+                  src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&q=80&w=150"
                   alt="Verified User"
                   className="w-10 h-10 rounded-full object-cover border-2 border-[#CCFF00]"
                 />
@@ -118,7 +118,7 @@ function Home() {
 
       {/* INTRO & HUMAN BENTO GRID */}
       <section className="bg-[#0A2E23] py-20 border-y border-emerald-800/40">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="w-full max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
             <span className="text-xs font-semibold tracking-widest text-[#CCFF00] uppercase">
               WHY ECO AFYA?
@@ -231,17 +231,17 @@ function Home() {
             <div className="flex -space-x-3 overflow-hidden">
               <img
                 className="inline-block h-12 w-12 rounded-full ring-2 ring-[#CCFF00] object-cover"
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150"
+                src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&q=80&w=150"
                 alt="User"
               />
               <img
                 className="inline-block h-12 w-12 rounded-full ring-2 ring-[#CCFF00] object-cover"
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150"
+                src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=150"
                 alt="User"
               />
               <img
                 className="inline-block h-12 w-12 rounded-full ring-2 ring-[#CCFF00] object-cover"
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150"
+                src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150"
                 alt="User"
               />
             </div>

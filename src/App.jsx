@@ -1,4 +1,3 @@
-import "./App.css";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -25,6 +24,13 @@ function ProtectedRoute({ user, children }) {
 function App() {
   const [user, setUser] = useState(null);
   const [checkingSession, setCheckingSession] = useState(true);
+  const [favorites, setFavorites] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("ecoAfyaFavorites") || "[]");
+    } catch {
+      return [];
+    }
+  });
 
   useEffect(() => {
     const checkSession = async () => {
@@ -68,6 +74,20 @@ function App() {
     setUser(null);
   };
 
+  const handleFavorite = (product) => {
+    setFavorites((currentFavorites) => {
+      const isFavorite = currentFavorites.some(
+        (favorite) => favorite.code === product.code
+      );
+      const nextFavorites = isFavorite
+        ? currentFavorites.filter((favorite) => favorite.code !== product.code)
+        : [...currentFavorites, product];
+
+      localStorage.setItem("ecoAfyaFavorites", JSON.stringify(nextFavorites));
+      return nextFavorites;
+    });
+  };
+
   if (checkingSession) {
     return (
       <main className="loading-page">
@@ -84,14 +104,24 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
 
-          <Route path="/products" element={<Products />} />
+          <Route
+            path="/products"
+            element={
+              <Products favorites={favorites} onFavorite={handleFavorite} />
+            }
+          />
 
           <Route
-            path="/products/:barcode"
+            path="/products/:code"
             element={<ProductDetails />}
           />
 
-          <Route path="/favorites" element={<Favorites />} />
+          <Route
+            path="/favorites"
+            element={
+              <Favorites favorites={favorites} onFavorite={handleFavorite} />
+            }
+          />
 
           <Route path="/about" element={<About />} />
 

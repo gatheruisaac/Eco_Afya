@@ -1,3 +1,7 @@
+@import "tailwindcss";
+
+@layer base {
+
 * {
   margin: 0;
   padding: 0;
@@ -2250,4 +2254,6 @@ select {
   .details-bottom-cta h2 {
     font-size: 2rem;
   }
+}
+
 }

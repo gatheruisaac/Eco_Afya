@@ -78,7 +78,7 @@ function Navbar({ user, onLogout }) {
               <img
                 src={
                   user.avatar ||
-                  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150"
+                  "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&q=80&w=150"
                 }
                 alt="User Profile"
                 className="w-8 h-8 rounded-full object-cover border border-[#CCFF00]"
