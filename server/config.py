@@ -18,10 +18,10 @@ class Config:
 
     SESSION_COOKIE_SAMESITE = os.getenv(
         "SESSION_COOKIE_SAMESITE",
-        "Lax"
+        "None"
     )
 
     SESSION_COOKIE_SECURE = os.getenv(
         "SESSION_COOKIE_SECURE",
-        "False"
+        "True"
     ).lower() == "true"

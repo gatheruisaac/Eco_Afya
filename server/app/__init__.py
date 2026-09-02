@@ -29,10 +29,13 @@ def create_app():
         "https://eco-afya.vercel.app",
     ]
 
-    extra_origin = os.getenv("FRONTEND_URL")
+    extra_origins = os.getenv("FRONTEND_URL", "")
 
-    if extra_origin:
-        allowed_origins.append(extra_origin)
+    allowed_origins.extend(
+        origin.strip()
+        for origin in extra_origins.split(",")
+        if origin.strip()
+    )
 
     CORS(
         app,
