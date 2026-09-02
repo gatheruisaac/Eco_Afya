@@ -1,129 +1,52 @@
+import { Link } from "react-router-dom";
+
 function About() {
   return (
-    <main className="about-page">
-      <section className="about-hero">
-        <div className="about-hero-content">
-          <p className="eyebrow">ABOUT ECO AFYA</p>
-
-          <h1>
-            Better choices start with better
-            <span> information.</span>
+    <main className="min-h-screen bg-[#071E17] text-white pb-20 selection:bg-[#CCFF00] selection:text-[#0A2E23]">
+      <div className="max-w-7xl mx-auto px-6 pt-10 space-y-16">
+        
+        {/* HERO HERO SECTION */}
+        <section className="text-center max-w-3xl mx-auto space-y-4">
+          <span className="text-xs font-bold tracking-widest text-[#CCFF00] uppercase">
+            OUR MISSION 🌱
+          </span>
+          <h1 className="text-4xl sm:text-6xl font-serif font-bold">
+            Bridging Health & <span className="text-[#CCFF00] italic font-normal">Sustainability</span>
           </h1>
-
-          <p>
-            Eco Afya brings nutrition, sustainability, and food discovery
-            together in one simple experience.
+          <p className="text-emerald-100/80 text-base sm:text-lg leading-relaxed">
+            Eco Afya was built to empower everyday consumers with transparent nutrition and environmental metrics, turning conscious eating into a daily lifestyle.
           </p>
-        </div>
+        </section>
 
-        <div className="about-hero-visual">
-          <div className="about-circle">
-            <span>🌍</span>
+        {/* STORY BENTO GRID WITH HUMAN PHOTOS */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div className="relative rounded-3xl overflow-hidden border border-emerald-800/50 aspect-[4/3]">
+            <img
+              src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=1000"
+              alt="Community active in sustainable food choices"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#071E17] via-transparent to-transparent opacity-60" />
           </div>
 
-          <div className="about-fruit fruit-a">🍊</div>
-          <div className="about-fruit fruit-b">🍓</div>
-          <div className="about-fruit fruit-c">🥑</div>
-          <div className="about-fruit fruit-d">🍋</div>
-        </div>
-      </section>
-
-      <section className="about-story">
-        <div className="about-story-card">
-          <p className="eyebrow">OUR MISSION</p>
-
-          <h2>
-            Making food information easier to understand.
-          </h2>
-
-          <p>
-            Choosing what to eat can be complicated. Eco Afya helps simplify
-            that decision by bringing important food information into one
-            place.
-          </p>
-
-          <p>
-            From nutritional scores to environmental impact, our goal is to
-            help people understand the products they consume and make choices
-            that are better for themselves and the planet.
-          </p>
-        </div>
-
-        <div className="about-values">
-          <div className="value-card value-green">
-            <span>🥗</span>
-            <h3>Health</h3>
-            <p>
-              Understand nutritional information and make informed food
-              decisions.
+          <div className="bg-[#0A2E23] p-8 sm:p-12 rounded-3xl border border-emerald-800/50 space-y-6">
+            <span className="text-2xl">🌍</span>
+            <h2 className="text-2xl font-serif font-bold">Driven by Open Data</h2>
+            <p className="text-sm text-emerald-200/80 leading-relaxed">
+              By combining Open Food Facts data with Nutri-Score and Eco-Score algorithms, Eco Afya gives instant clarity on what you put inside your body—and the footprint it leaves behind.
             </p>
+            <div className="pt-2">
+              <Link
+                to="/products"
+                className="inline-flex items-center gap-2 bg-[#CCFF00] text-[#0A2E23] font-bold px-6 py-3 rounded-full text-xs shadow-md"
+              >
+                Explore Products Now →
+              </Link>
+            </div>
           </div>
+        </section>
 
-          <div className="value-card value-orange">
-            <span>🌎</span>
-            <h3>Sustainability</h3>
-            <p>
-              Discover environmental information and consider the impact of
-              your food choices.
-            </p>
-          </div>
-
-          <div className="value-card value-purple">
-            <span>💡</span>
-            <h3>Awareness</h3>
-            <p>
-              Turn complex product information into simple, useful insights.
-            </p>
-          </div>
-
-          <div className="value-card value-pink">
-            <span>❤️</span>
-            <h3>Personal Choice</h3>
-            <p>
-              Save products, track your food journey, and build your own
-              collection.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="about-data">
-        <div className="data-icon">🌱</div>
-
-        <div>
-          <p className="eyebrow">POWERED BY OPEN FOOD FACTS</p>
-
-          <h2>
-            Food information from a global open database.
-          </h2>
-
-          <p>
-            Eco Afya uses data from Open Food Facts to provide product,
-            nutrition, ingredient, and environmental information.
-          </p>
-        </div>
-      </section>
-
-      <section className="about-final">
-        <p className="eyebrow">THE ECO AFYA IDEA</p>
-
-        <h2>
-          Small food decisions can make a
-          <span> big difference.</span>
-        </h2>
-
-        <p>
-          Eat with awareness. Choose with confidence. Think about tomorrow.
-        </p>
-
-        <div className="about-final-icons">
-          <span>🥑</span>
-          <span>🍎</span>
-          <span>🥕</span>
-          <span>🍓</span>
-          <span>🌍</span>
-        </div>
-      </section>
+      </div>
     </main>
   );
 }
