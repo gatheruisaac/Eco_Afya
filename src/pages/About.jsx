@@ -22,8 +22,8 @@ function About() {
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div className="relative rounded-3xl overflow-hidden border border-emerald-800/50 aspect-[4/3]">
             <img
-              src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=1000"
-              alt="Community active in sustainable food choices"
+              src="https://c.pxhere.com/photos/87/79/nutmeg_spice_zanzibar_farming_africa_color_colorful_canon-130131.jpg!d"
+              alt="Nutmeg spices from farming in Zanzibar"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#071E17] via-transparent to-transparent opacity-60" />

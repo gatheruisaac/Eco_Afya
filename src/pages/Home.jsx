@@ -75,8 +75,8 @@ function Home() {
               {/* Main Community Photo */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-emerald-700/40 aspect-[4/5] group">
                 <img
-                  src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1000"
-                  alt="People working together on sustainable environment"
+                  src="https://upload.wikimedia.org/wikipedia/commons/2/22/Ghana_cacao2.jpg"
+                  alt="Cacao harvested in Ghana"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#071E17] via-transparent to-transparent opacity-80" />
@@ -139,8 +139,8 @@ function Home() {
             <div className="bg-[#071E17] rounded-3xl overflow-hidden border border-emerald-800/50 hover:border-emerald-600 transition-all duration-300 group flex flex-col justify-between">
               <div className="h-48 overflow-hidden relative">
                 <img
-                  src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&q=80&w=600"
-                  alt="Healthy fresh ingredients"
+                  src="https://upload.wikimedia.org/wikipedia/commons/0/06/TIN_TIN%28_Local_wild_fruit_in_Bamenda%2C_Cameroon%29.jpg"
+                  alt="Local wild fruit from Bamenda, Cameroon"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <span className="absolute top-4 right-4 bg-[#0A2E23]/80 backdrop-blur-md text-[#CCFF00] text-xs font-bold px-3 py-1 rounded-full border border-emerald-600/40">
@@ -160,8 +160,8 @@ function Home() {
             <div className="bg-[#071E17] rounded-3xl overflow-hidden border border-emerald-800/50 hover:border-emerald-600 transition-all duration-300 group flex flex-col justify-between">
               <div className="h-48 overflow-hidden relative">
                 <img
-                  src="https://images.unsplash.com/photo-1511497584788-876761011935?auto=format&fit=crop&q=80&w=600"
-                  alt="Sustainable nature and planet"
+                  src="https://c.pxhere.com/photos/87/79/nutmeg_spice_zanzibar_farming_africa_color_colorful_canon-130131.jpg!d"
+                  alt="Nutmeg spices from farming in Zanzibar"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <span className="absolute top-4 right-4 bg-[#0A2E23]/80 backdrop-blur-md text-[#CCFF00] text-xs font-bold px-3 py-1 rounded-full border border-emerald-600/40">
