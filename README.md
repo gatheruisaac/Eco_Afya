@@ -4,7 +4,7 @@ Eco Afya is a full-stack web application that helps users make more informed and
 
 The application allows users to explore food products using data from the Open Food Facts API, view nutritional and sustainability information, save favorite products, and maintain personal food logs.
 
-For Phase 2, Eco Afya was expanded into a full-stack application using **React on the frontend, Flask on the backend, and PostgreSQL for persistent data storage**. User authentication and ownership controls ensure that users can only access and manage their own personal records.
+Eco Afya is a full-stack application using **React on the frontend, Flask on the backend, and PostgreSQL for persistent data storage**. User authentication and ownership controls ensure that users can only access and manage their own personal records.
 
 ---
 
@@ -592,11 +592,11 @@ Eco Afya is deployed using Vercel for the frontend and Render for the Flask back
 
 ### Live Application
 
-[Eco Afya Live Application](https://eco-afya.vercel.app/?utm_source=chatgpt.com)
+[Eco Afya Live Application](https://eco-afya.vercel.app/)
 
 ### GitHub Repository
 
-[Eco Afya GitHub Repository](https://github.com/gatheruisaac/Eco_Afya?utm_source=chatgpt.com)
+[Eco Afya GitHub Repository](https://github.com/gatheruisaac/Eco_Afya)
 
 ---
 
@@ -606,7 +606,7 @@ The goal of Eco Afya is to make food information easier to understand by present
 
 Instead of considering only calories or nutritional values, users can also consider the environmental impact of their food choices.
 
-Phase 2 extends this idea by allowing users to create accounts and maintain personal food-consumption records.
+Users can create accounts and maintain personal food-consumption records.
 
 ---
 
@@ -629,6 +629,158 @@ Possible future improvements include:
 
 **Isaac Gatheru Kanyua**
 
-Built as a **Moringa School Phase 2 Full-Stack Application**.
+Built as a **Moringa School Full-Stack Application**.
 
 ---
+
+# Current Project Notes
+
+This section records the current implementation details added after the original project documentation was written.
+
+## Current Frontend Stack
+
+The frontend uses Tailwind CSS with the Vite integration for the current responsive interface.
+
+Tailwind is configured through:
+
+* `tailwindcss`
+* `@tailwindcss/vite`
+* `vite.config.js`
+* `src/index.css`
+
+Install all frontend dependencies with:
+
+```bash
+npm install
+```
+
+Run the frontend locally with:
+
+```bash
+npm run dev
+```
+
+Build the frontend for production with:
+
+```bash
+npm run build
+```
+
+## Environment Variables
+
+The frontend reads the Flask backend URL from `VITE_API_URL`.
+
+For local development, create a `.env` or `.env.local` file in the project root:
+
+```env
+VITE_API_URL=http://localhost:5000
+```
+
+For deployment, configure the variable with the deployed Flask API URL:
+
+```env
+VITE_API_URL=https://eco-afya-api.onrender.com
+```
+
+The Flask backend requires the following variables in `server/.env`:
+
+```env
+DATABASE_URL=your_postgresql_database_url
+SECRET_KEY=your_secret_key
+FRONTEND_URL=https://eco-afya.vercel.app
+SESSION_COOKIE_SAMESITE=None
+SESSION_COOKIE_SECURE=True
+```
+
+Never commit real secrets, database credentials, access tokens, or private environment files.
+
+## Current Product Routes
+
+The product detail route currently uses a product code:
+
+```text
+/products/:code
+```
+
+For example:
+
+```text
+/products/3760049790214
+```
+
+The products page requests its catalogue through:
+
+```text
+GET /api/products
+```
+
+The Vercel serverless function proxies product data from Open Food Facts and returns a JSON object containing a `products` array.
+
+## Current User Experience
+
+The current interface includes:
+
+* A responsive dark green and lime visual system.
+* Product discovery with Nutri-Score and Eco-Score indicators.
+* Product detail views with product images, ingredients, and barcode information.
+* Browser-based favorite product storage.
+* Session-protected personal food logs.
+* Product suggestions while creating a food log.
+* Loading, empty, and error states across data-driven pages.
+* African food and agriculture imagery from Ghana, Cameroon, and Zanzibar on the public-facing pages.
+
+## Presentation Materials
+
+A PowerPoint presentation is included for project demonstrations and capstone presentations:
+
+```text
+presentation/eco-afya-presentation.pptx
+```
+
+The deck covers:
+
+* The food-choice problem.
+* The Eco Afya solution.
+* The user journey.
+* Product intelligence and scoring.
+* Favorites and food logs.
+* Full-stack architecture.
+* A live product demonstration invitation.
+
+The deck source generator is available at:
+
+```text
+presentation/eco-afya-presentation.js
+```
+
+## Deployment Links
+
+* Frontend: [https://eco-afya.vercel.app](https://eco-afya.vercel.app)
+* GitHub repository: [https://github.com/gatheruisaac/Eco_Afya](https://github.com/gatheruisaac/Eco_Afya)
+* Backend health check: [https://eco-afya-api.onrender.com/health](https://eco-afya-api.onrender.com/health)
+* Product API: [https://eco-afya.vercel.app/api/products](https://eco-afya.vercel.app/api/products)
+
+## Verification Commands
+
+From the project root:
+
+```bash
+npm run build
+npm run lint
+```
+
+From the backend environment:
+
+```bash
+python3 -m py_compile server/app/__init__.py server/config.py server/app/routes.py
+```
+
+The production build and Python syntax checks should pass before deployment. The lint command also scans generated or presentation files, so any reported lint warnings should be reviewed before final submission.
+
+## Known Limitations and Future Work
+
+* Open Food Facts availability can affect product catalogue loading.
+* Favorites currently use browser Local Storage rather than PostgreSQL persistence.
+* Food-log pagination is supported by the backend, while the current interface loads the first page of records.
+* Automated frontend and backend tests should be added as a future improvement.
+* The mobile navigation can be expanded into a dedicated menu for smaller screens.
